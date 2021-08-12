@@ -1,19 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
 import 'package:yakuswap/repositories/allinone.dart';
 import 'package:yakuswap/screens/currencies.dart';
 import 'package:yakuswap/screens/trades.dart';
-import 'package:window_size/window_size.dart';
+import 'package:desktop_window/desktop_window.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-    setWindowMinSize(const Size(640, 960));
-    setWindowMaxSize(const Size(640, 960));
-  }
+  await DesktopWindow.setWindowSize(Size(640, 960));
   runApp(MyApp());
 }
 

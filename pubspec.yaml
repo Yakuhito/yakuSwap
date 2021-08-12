@@ -40,6 +40,7 @@ dependencies:
   formz: ^0.4.0
   crypto: ^3.0.1
   loading_indicator: ^3.0.1
+  desktop_window: ^0.4.0
 
 dev_dependencies:
   flutter_test:
