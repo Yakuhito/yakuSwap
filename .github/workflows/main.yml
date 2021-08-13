@@ -5,7 +5,6 @@ on: push
 jobs: 
   build-server-linux:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Code
       with: 
@@ -39,7 +38,6 @@ jobs:
 
   build-server-windows:
     runs-on: windows-latest
-
     steps:
     - name: Checkout Code
       with: 
@@ -81,7 +79,6 @@ jobs:
           TARGET: linux     
         - os: windows-2019
           TARGET: windows
-
     steps:
     - name: Checkout
       uses: actions/checkout@v2 
@@ -143,25 +140,52 @@ jobs:
         path: ${{ github.workspace }}/client/build/windows/runner/Release
 
 
-  make-release:  
+  make-linux-bundle:  
     runs-on: ubuntu-latest
-    if: startsWith( github.ref, 'refs/tags/v') 
-    needs: [build-server-linux, build-server-windows, build-ui]
-
+    needs: [build-server-linux, build-ui]
     steps:
-    - name: Get release version
-      id: release_version
-      run: |
-        echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
-
     - name: Create directories
       run: |
-        mkdir windows
-        mkdir windows/client
-        mkdir windows/server
-        mkdir linux
-        mkdir linux/client
-        mkdir linux/server
+        mkdir yakuSwap-linux
+        mkdir yakuSwap-linux/client
+        mkdir yakuSwap-linux/server
+
+    - name: Download Linux client
+      uses: actions/download-artifact@v2
+      with: 
+        name: Linux-Client
+        path: yakuSwap-linux/client
+
+    - name: Download Linux server
+      uses: actions/download-artifact@v2
+      with: 
+        name: Linux-Server
+        path: yakuSwap-linux/server
+
+    - name: Rename client & mark as executable
+      run: |
+        mv yakuSwap-linux/client/client yakuSwap-linux/client/yakuSwap-client
+        chmod +x yakuSwap-linux/client/yakuSwap-client
+
+    - name: Zip Linux folder
+      run: zip -r yakuSwap-linux.zip yakuSwap-linux/*
+
+    - name: Upload to artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Linux-Bundle
+        path: ${{ github.workspace }}/yakuSwap-linux.zip
+
+
+  make-windows-bundle:  
+    runs-on: ubuntu-latest
+    needs: [build-server-windows, build-ui]
+    steps:
+    - name: Create directories
+      run: |
+        mkdir yakuSwap-windows
+        mkdir yakuSwap-windows/client
+        mkdir yakuSwap-windows/server
 
     - name: Download Windows client
       uses: actions/download-artifact@v2
@@ -175,23 +199,41 @@ jobs:
         name: Windows-Server
         path: windows/server
 
+    - name: Rename client
+      run: |
+        mv yakuSwap-windows/client/client.exe yakuSwap-windows/client/yakuSwap-client.exe
+
     - name: Zip Windows folder
-      run: zip -r windows.zip windows/*
+      run: zip -r wakuSwap-windows.zip yakuSwap-windows/*
 
-    - name: Download Linux client
+    - name: Upload to artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Windows-Bundle
+        path: ${{ github.workspace }}/yakuSwap-windows.zip
+
+
+  release:  
+    runs-on: ubuntu-latest
+    if: startsWith( github.ref, 'refs/tags/v') 
+    needs: [make-linux-bundle, make-windows-bundle]
+    steps:
+    - name: Get release version
+      id: release_version
+      run: |
+        echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
+
+    - name: Download Linux bundle
       uses: actions/download-artifact@v2
       with: 
-        name: Linux-Client
-        path: linux/client
+        name: Linux-Bundle
+        path: yakuSwap-linux.zip
 
-    - name: Download Linux server
+    - name: Download Windows bundle
       uses: actions/download-artifact@v2
       with: 
-        name: Linux-Server
-        path: linux/server
-
-    - name: Zip Linux folder
-      run: zip -r linux.zip linux/*
+        name: Windows-Bundle
+        path: yakuSwap-windows.zip
 
     - name: Create Release
       id: create_release
@@ -210,8 +252,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./windows.zip
-        asset_name: Windows.zip
+        asset_path: ./yakuSwap-windows.zip
+        asset_name: yakuSwap-windows.zip
         asset_content_type: application/zip
 
     - name: Upload Release Assets - Linux
@@ -220,7 +262,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./linux.zip
-        asset_name: Linux.zip
+        asset_path: ./yakuSwap-linux.zip
+        asset_name: yakuSwap-linux.zip
         asset_content_type: application/zip
     
