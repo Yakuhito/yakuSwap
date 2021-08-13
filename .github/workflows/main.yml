@@ -167,14 +167,11 @@ jobs:
         mv yakuSwap-linux/client/client yakuSwap-linux/client/yakuSwap-client
         chmod +x yakuSwap-linux/client/yakuSwap-client
 
-    - name: Zip Linux folder
-      run: zip -r yakuSwap-linux.zip yakuSwap-linux/*
-
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Linux-Bundle
-        path: ${{ github.workspace }}/yakuSwap-linux.zip
+        name: yakuSwap-linux
+        path: ${{ github.workspace }}/yakuSwap-linux
 
 
   make-windows-bundle:  
@@ -203,14 +200,11 @@ jobs:
       run: |
         mv yakuSwap-windows/client/client.exe yakuSwap-windows/client/yakuSwap-client.exe
 
-    - name: Zip Windows folder
-      run: zip -r yakuSwap-windows.zip yakuSwap-windows/*
-
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Windows-Bundle
-        path: ${{ github.workspace }}/yakuSwap-windows.zip
+        name: yakuSwap-windows
+        path: ${{ github.workspace }}/yakuSwap-windows
 
 
   release:  
@@ -226,14 +220,20 @@ jobs:
     - name: Download Linux bundle
       uses: actions/download-artifact@v2
       with: 
-        name: Linux-Bundle
-        path: yakuSwap-linux.zip
+        name: yakuSwap-linux
+        path: yakuSwap-linux
+
+    - name: Zip Linux bundle
+      run: zip -r yakuSwap-linux.zip yakuSwap-linux/*
 
     - name: Download Windows bundle
       uses: actions/download-artifact@v2
       with: 
-        name: Windows-Bundle
-        path: yakuSwap-windows.zip
+        name: yakuSwap-windows
+        path: yakuSwap-windows
+
+    - name: Zip Windows bundle
+      run: zip -r yakuSwap-windows.zip yakuSwap-windows/*
 
     - name: Create Release
       id: create_release
