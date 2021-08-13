@@ -191,13 +191,13 @@ jobs:
       uses: actions/download-artifact@v2
       with: 
         name: Windows-Client
-        path: windows/client
+        path: yakuSwap-windows/client
 
     - name: Download Windows server
       uses: actions/download-artifact@v2
       with: 
         name: Windows-Server
-        path: windows/server
+        path: yakuSwap-windows/server
 
     - name: Rename client
       run: |
