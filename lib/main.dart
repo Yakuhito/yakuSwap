@@ -8,14 +8,24 @@ import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
 import 'package:yakuswap/repositories/allinone.dart';
 import 'package:yakuswap/screens/currencies.dart';
 import 'package:yakuswap/screens/trades.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
-const List<Size> screenSizes = [Size(640, 960), Size(800, 1200), Size(960, 1440), Size(1200, 1800), Size(1600, 2400), Size(1800, 2700)];
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      setWindowMinSize(screenSizes[0]);
-      setWindowMaxSize(screenSizes[0]);
+     late final Size windowSize;
+     try {
+       final String windowSizeStr = await rootBundle.loadString("screen_size.txt", cache: false);
+       windowSize = Size(
+        double.parse(windowSizeStr.split(" ")[0]),
+        double.parse(windowSizeStr.split(" ")[1])
+      );
+     } catch (_) {
+       windowSize = Size(640, 960);
+     }
+      
+      setWindowMinSize(windowSize);
+      setWindowMaxSize(windowSize);
       setWindowTitle('yakuSwap Client');
   }
   runApp(MyApp());
@@ -61,17 +71,6 @@ class _TabController extends StatelessWidget {
             ],
           ),
           actions: [
-            IconButton(
-              icon: Icon(Icons.fit_screen_outlined),
-              onPressed: () async {
-                final Size screenSize = await getWindowMinSize();
-                final int index = screenSizes.indexWhere((element) => element.width == screenSize.width);
-                final int newIndex = (index + 1) % screenSizes.length;
-                final Size newSize = screenSizes[newIndex];
-                setWindowMinSize(newSize);
-                setWindowMaxSize(newSize); 
-              }
-            ),
             Builder(builder: (context) => IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () => BlocProvider.of<CurrenciesAndTradesCubit>(context).refresh(),
