@@ -487,6 +487,9 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
               errorText: widget.form.totalAmount.pure
                   ? null
                   : widget.form.totalAmount.error,
+              helperText: _getAmountHelper(
+                widget.form.totalAmount.value, widget.form.addressPrefix.value
+              ),
             ),
             onChanged: (newVal) => widget.onFormChanged(widget.form.copyWith(
                 totalAmount: TransactionAmountInput.dirty(value: newVal))),
@@ -495,6 +498,22 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
         ],
       ),
     );
+  }
+
+  String? _getAmountHelper(String amount, String prefix) {
+    if (int.tryParse(amount) == null) return null;
+    final List<Currency> currencies =
+        BlocProvider.of<CurrenciesAndTradesCubit>(context).state.currencies!;
+    final Currency currency =
+        currencies.firstWhere((element) => element.addressPrefix == prefix);
+    int amnt = int.parse(amount);
+    final int units = (amnt / currency.unitsPerCoin).floor();
+    String s = "$units.";
+    amnt = amnt - units * currency.unitsPerCoin;
+    for(int pow = 1; pow * amnt * 10 < currency.unitsPerCoin; pow *= 10)
+      s += "0";
+    s += "$amnt ${currency.addressPrefix.toUpperCase()}";
+    return s;
   }
 
   String? _getFeeHelper(String amount, String prefix) {
