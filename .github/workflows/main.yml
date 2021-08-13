@@ -204,7 +204,7 @@ jobs:
         mv yakuSwap-windows/client/client.exe yakuSwap-windows/client/yakuSwap-client.exe
 
     - name: Zip Windows folder
-      run: zip -r wakuSwap-windows.zip yakuSwap-windows/*
+      run: zip -r yakuSwap-windows.zip yakuSwap-windows/*
 
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
