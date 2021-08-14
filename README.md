@@ -31,7 +31,7 @@ You can modify the client app's window size by editing `client/data/flutter_asse
 ### My trade partner took a really long time (> 6h) to complete a step. Is there any danger?
 If the total time required to make a trade is higher than 16-18 hours, I highly recommend cancelling it by closing the client and the server, waiting another day and then opening the trade - that doesn't mean your partner had malicious intentions, though. Please keep in mind that your coins will get unlocked after a few days.
 
-### I just cancelled my trade / My trade just got cancelled. How long should I wait before getting my coins back?
+### I just cancelled my trade / My trade just got cancelled. How long do I have to wait before getting my coins back?
 If your trade gets cancelled for any reason, your coins will be locked for a certain period of time. For most currencies, that period is 16000 blocks from the moment the contract was issued (about 2-3 days). This long period was chosen in order to prevent a certain kind of attack against the swap.
 
 ### Can my Chia fork be added?
