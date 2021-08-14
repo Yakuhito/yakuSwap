@@ -18,7 +18,7 @@ I'm Mihai, but I usually go by the username `yakuhito`. Here's my [Twitter profi
 I have a few theories, but I cannot give a definitive answer. All binaries were built using GitHub Actions from the public source code, which you can find in my repositories - if you don't want to trust me, just read the code and compile the binaries yourself.
 
 ### How can I resize the client window?
-You can modify the client app's window size by editing `client/data/flutter_assets/screen_size.txt` and resarting the application.
+You can modify the client app's window size by editing `client/data/flutter_assets/screen_size.txt` and restarting the application.
 
 ### My trade partner took a really long time (> 6h) to complete a step. Is there any danger?
 If the total time required to make a trade is higher than 16-18 hours, I highly recommend cancelling it by closing the client and the server, waiting another day and then opening the trade - that doesn't mean your partner had malicious intentions, though.
