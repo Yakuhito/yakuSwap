@@ -7,6 +7,14 @@ This repository only holds the source of the UI client. The server application c
 
 [Releases](https://github.com/Yakuhito/yakuSwap/releases)
 
+## Screenshots
+![1.png](/screenshots/1.png?raw=true "Currencies View")
+![2.png](/screenshots/2.png?raw=true "Trades View")
+![3.png](/screenshots/3.png?raw=true "Edit Currency")
+![4.png](/screenshots/4.png?raw=true "Edit Trade 1")
+![5.png](/screenshots/5.png?raw=true "Edit Trade 2")
+![6.png](/screenshots/6.png?raw=true "Trade View")
+
 ## FAQ
 ### What is an atomic cross-chain swap?
 It's a way of exchanging two cryptocurrencies without a trusted third party.
