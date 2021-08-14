@@ -398,7 +398,7 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
                     errorText:
                         widget.form.fee.pure ? null : widget.form.fee.error,
                     helperText: _getFeeHelper(
-                        widget.form.fee.value, widget.form.addressPrefix.value),
+                        widget.form.fee.value, widget.form.addressPrefix.value, widget.form.totalAmount.value),
                   ),
                   onChanged: (newVal) => widget.onFormChanged(
                       widget.form.copyWith(fee: FeeInput.dirty(value: newVal))),
@@ -516,13 +516,19 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
     return s;
   }
 
-  String? _getFeeHelper(String amount, String prefix) {
+  String? _getFeeHelper(String amount, String prefix, String transactionAmount) {
     if (int.tryParse(amount) == null) return null;
+    final int? transAmount = int.tryParse(transactionAmount);
     final List<Currency> currencies =
         BlocProvider.of<CurrenciesAndTradesCubit>(context).state.currencies!;
     final Currency currency =
         currencies.firstWhere((element) => element.addressPrefix == prefix);
-    if (int.parse(amount) >= currency.minFee) return null;
+    if (int.parse(amount) >= currency.minFee) {
+      if(transAmount == null) return null;
+      final int recommendedFee = (transAmount / 1000000).ceil();
+      if(int.parse(amount) == recommendedFee) return null;
+      return "Recommended for security: $recommendedFee";
+    }
     return "Min fee: ${currency.minFee} - transaction might not work";
   }
 
