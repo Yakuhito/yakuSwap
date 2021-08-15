@@ -144,8 +144,8 @@ class __BodyState extends State<_Body> {
                 key: Key("tradeForm_id_${state.form.id.value}"),
                 initialValue: state.form.id.value,
                 decoration: InputDecoration(
-                  labelText: HashInput.labelText,
-                  hintText: HashInput.hintText,
+                  labelText: IdInput.labelText,
+                  hintText: IdInput.hintText,
                   errorText: state.form.id.pure ? null : state.form.id.error,
                 ),
                 enabled: false,

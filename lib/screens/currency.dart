@@ -210,7 +210,7 @@ class __BodyState extends State<_Body> {
                       child: TextFormField(
                         controller: _minFeeController,
                         decoration: InputDecoration(
-                          labelText: FeeInput.labelText + "(min)",
+                          labelText: FeeInput.labelText + " (min)",
                           hintText: FeeInput.hintText,
                           errorText: state.form.minFee.pure
                               ? null
