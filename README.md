@@ -7,6 +7,8 @@ This repository only holds the source of the UI client. The server application c
 
 [Releases](https://github.com/Yakuhito/yakuSwap/releases)
 
+[YouTube Demo Trade](https://youtu.be/3iAqYNNq-h8)
+
 ## Screenshots
 ![1.png](/screenshots/1.png?raw=true "Currencies View")
 ![2.png](/screenshots/2.png?raw=true "Trades View")
