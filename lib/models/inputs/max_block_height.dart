@@ -4,7 +4,7 @@ const ALPHABET = "0123456789";
 
 class MaxBlockHeightInput extends FormzInput<String, String> {
   static const String labelText = "Max Block Height";
-  static const String hintText = "5000";
+  static const String hintText = "16000";
 
   const MaxBlockHeightInput.pure() : super.pure("");
   const MaxBlockHeightInput.dirty({String value = ""}) : super.dirty(value);
