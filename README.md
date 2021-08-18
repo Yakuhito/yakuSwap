@@ -9,6 +9,23 @@ This repository only holds the source of the UI client. The server application c
 
 [YouTube Demo Trade](https://youtu.be/3iAqYNNq-h8)
 
+## Why use yakuSwap?
+
+**It's faster**: There's no need to search for an escrow! A yakuSwap trade has 100 blocks (31.25 minutes) to succeed. If anything goes wrong, you'll get your money back in 150 blocks (~47 minutes) from the original transaction.
+
+**It's cheaper**: The total swap fee doesn't exceed 0.75% of the transacted amount.
+
+**It's safer**: It's always safer to trust nobody rather than somebody. With yakuSwap, you don't need to trust anyone - escrows, intermediaries, exchanges or trade partners - since your money is handled by smart contracts.
+
+## How to use
+You're going to need a fully synced node for each currency involved in a swap. Download the latest version of yakuSwap from the [releases page of this project](https://github.com/Yakuhito/yakuSwap/releases) on the same computer the nodes are running on and extract the zip file. It's recommended to start the server before starting the client.
+
+After conecting with a trade partner via the Discord bot, copy the given string to your clipboard. Open yakuSwap, navigate to the 'Trades' tab, and click on the 'Add new trade' button. Click on 'Import' to load the trade from your clipboard. After clicking 'save', click on the trade to start it (the newest trade is usually at the bottom of the list).
+
+You can now follow the intructions on screen. You and your partner will make one transaction each. After seeing 'Done! Check your wallet :)' and  using the wallet to confirm that you have successfully received your coins (you might have to wait a minute for the transaction to be included in a block), you can safely delete the trade.
+
+Please note that the server creates a new log file for each trade. If anything unexpected happens with one of your trades, its log file will be useful in restoring your coins. However, the log also contains sensitive data, so please only share it with trusted people.
+
 ## Screenshots
 ![1.png](/screenshots/1.png?raw=true "Currencies View")
 ![2.png](/screenshots/2.png?raw=true "Trades View")
