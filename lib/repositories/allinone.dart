@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:yakuswap/models/currency.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:yakuswap/models/full_node_connection.dart';
 import 'package:yakuswap/models/trade.dart';
 import 'package:yakuswap/models/trade_status.dart';
 
@@ -34,6 +35,19 @@ class AllInOneRepository {
 
     for(int i = 0; i < trades.length; ++i)
       ret.add(Trade.fromJSON(trades[i]));
+
+    return ret;
+  }
+
+  Future<List<FullNodeConnection>> getConnections() async {
+    List<FullNodeConnection> ret = [];
+
+    final http.Response res = await http.get(Uri.parse("$API_HOST/connection-status"));
+    final Map<String, dynamic> parsed = jsonDecode(res.body);
+    final List<Map<String, dynamic>> connections = List<Map<String, dynamic>>.from(parsed['connections']);
+
+    for(int i = 0; i < connections.length; ++i)
+      ret.add(FullNodeConnection.fromJSON(connections[i]));
 
     return ret;
   }

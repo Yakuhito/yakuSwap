@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:yakuswap/models/currency.dart';
+import 'package:yakuswap/models/full_node_connection.dart';
 import 'package:yakuswap/models/trade.dart';
 import 'package:yakuswap/repositories/allinone.dart';
 
@@ -25,6 +26,9 @@ class CurrenciesAndTradesCubit extends Cubit<CurrenciesAndTradesState> {
       final List<Trade> trades = results[1];
 
       emit(CurrenciesAndTradesState.loaded(currencies, trades));
+
+      final List<FullNodeConnection> connections = await repository.getConnections();
+      emit(CurrenciesAndTradesState.loaded(currencies, trades, connections: connections));
     } catch(_) {
       emit(CurrenciesAndTradesState.error());
     }

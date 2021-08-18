@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
 import 'package:yakuswap/models/currency.dart';
+import 'package:yakuswap/models/full_node_connection.dart';
 import 'package:yakuswap/screens/currency.dart';
 
 class CurrenciesScreen extends StatelessWidget {
@@ -13,7 +14,8 @@ class CurrenciesScreen extends StatelessWidget {
     return BlocBuilder<CurrenciesAndTradesCubit, CurrenciesAndTradesState>(
       buildWhen: (oldState, newState) =>
           oldState.status != newState.status ||
-          oldState.currencies != newState.currencies,
+          oldState.currencies != newState.currencies ||
+          oldState.connections != newState.connections,
       builder: (context, state) {
         if (state.status == CurrenciesAndTradesStatus.loading)
           return Center(
@@ -44,7 +46,10 @@ class CurrenciesScreen extends StatelessWidget {
                   },
                 ),
               );
-            return _CurrencyTile(currency: state.currencies![index]);
+            return _CurrencyTile(
+              currency: state.currencies![index],
+              connection: state.connections?.firstWhere((element) => element.currency == state.currencies![index].addressPrefix),
+            );
           },
         );
       },
@@ -54,8 +59,22 @@ class CurrenciesScreen extends StatelessWidget {
 
 class _CurrencyTile extends StatelessWidget {
   final Currency currency;
+  final FullNodeConnection? connection;
 
-  const _CurrencyTile({ required this.currency, Key? key }) : super(key: key);
+  const _CurrencyTile({ required this.currency, this.connection, Key? key }) : super(key: key);
+
+  Color _getStatusColor() {
+    switch(connection?.status) {
+      case null:
+        return Colors.white;
+      case FullNodeConnectionStatus.connected:
+        return Colors.green;
+      case FullNodeConnectionStatus.not_synced:
+        return Colors.orange;
+      case FullNodeConnectionStatus.not_connected:
+        return Colors.red;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +103,18 @@ class _CurrencyTile extends StatelessWidget {
             BlocProvider.of<CurrenciesAndTradesCubit>(context).deleteCurrency(addressPrefix: currency.addressPrefix);
           }
         },
+        trailing: LayoutBuilder(
+          builder: (context, constraints) {
+            return Container(
+              width: constraints.maxHeight * 0.33,
+              height: constraints.maxHeight * 0.33,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _getStatusColor(),
+              ),
+            );
+          }
+        ),
       ),
     );
   }
