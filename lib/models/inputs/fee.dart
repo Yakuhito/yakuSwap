@@ -4,7 +4,7 @@ const ALPHABET = "0123456789";
 
 class FeeInput extends FormzInput<String, String> {
   static const String labelText = "Fee";
-  static const String hintText = "1";
+  static const String hintText = "1000";
 
   const FeeInput.pure() : super.pure("");
   const FeeInput.dirty({String value = ""}) : super.dirty(value);

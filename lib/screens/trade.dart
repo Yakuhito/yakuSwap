@@ -525,7 +525,7 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
         currencies.firstWhere((element) => element.addressPrefix == prefix);
     if (int.parse(amount) >= currency.minFee) {
       if(transAmount == null) return null;
-      final int recommendedFee = (transAmount / 1000000).ceil();
+      final int recommendedFee = (transAmount / 10000).ceil();
       if(int.parse(amount) == recommendedFee) return null;
       return "Recommended for security: $recommendedFee";
     }
