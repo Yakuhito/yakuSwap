@@ -11,7 +11,7 @@ import 'package:yakuswap/models/trade_status.dart';
 // todo: api host offline
 
 class AllInOneRepository {
-  static const String API_HOST = "http://127.0.0.1:4143";
+  static const String API_HOST = "http://127.0.0.1:4143/api";
 
   Future<List<Currency>> getCurrencies() async {
     List<Currency> ret = [];

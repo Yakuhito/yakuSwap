@@ -32,10 +32,6 @@ dependencies:
   flutter_bloc: ^7.0.1
   bloc: ^7.0.0
   http: ^0.13.3
-  window_size:
-    git:
-      url: git://github.com/google/flutter-desktop-embedding.git
-      path: plugins/window_size
   flutter_svg: ^0.22.0
   formz: ^0.4.0
   crypto: ^3.0.1
@@ -57,8 +53,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - screen_size.txt
+  # assets:
+  #  - screen_size.txt
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

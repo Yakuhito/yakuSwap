@@ -1,33 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:window_size/window_size.dart';
 import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
 import 'package:yakuswap/repositories/allinone.dart';
 import 'package:yakuswap/screens/currencies.dart';
 import 'package:yakuswap/screens/trades.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-     late final Size windowSize;
-     try {
-       final String windowSizeStr = await rootBundle.loadString("screen_size.txt", cache: false);
-       windowSize = Size(
-        double.parse(windowSizeStr.split(" ")[0]),
-        double.parse(windowSizeStr.split(" ")[1])
-      );
-     } catch (_) {
-       windowSize = Size(640, 960);
-     }
-      
-      setWindowMinSize(windowSize);
-      setWindowMaxSize(windowSize);
-      setWindowTitle('yakuSwap Client');
-  }
+void main() {
   runApp(MyApp());
 }
 
