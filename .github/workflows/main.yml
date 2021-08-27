@@ -32,7 +32,7 @@ jobs:
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Linux-Server
+        name: Linux-App
         path: ${{ github.workspace }}/server/dist/linux
 
 
@@ -65,20 +65,12 @@ jobs:
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Windows-Server
+        name: Windows-App
         path: ${{ github.workspace }}/server/dist/windows
 
 
-  build-ui:  
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-2019, ubuntu-18.04]
-        include: 
-        - os: ubuntu-18.04
-          TARGET: linux     
-        - os: windows-2019
-          TARGET: windows
+  build-ui:
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2 
@@ -99,45 +91,21 @@ jobs:
       run: git fetch origin +refs/tags/*:refs/tags/*
       working-directory: ${{ github.workspace }}/flutter
 
-    - name: Add Flutter to path - Windows
-      if: startsWith(matrix.os, 'windows')
-      run: echo "$env:GITHUB_WORKSPACE\flutter\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-    - name: Add Flutter to path - Linux
-      if: startsWith(matrix.os, 'ubuntu')
-      run: echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
-
-    - name: Install Linux dependencies  
-      if: startsWith(matrix.os, 'ubuntu')
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev liblzma-dev
-
-    - name: Enable desktop support  
-      run: |
-        flutter config --enable-linux-desktop 
-        flutter config --enable-windows-desktop 
-
+    - name: Enable web support  
+      run: flutter config --enable-web
+    
     - name: Build client
       run: |
-        flutter create --platforms=windows,linux .
-        flutter packages get  
-        flutter build -v ${{matrix.TARGET}} --release 
+        flutter create --platforms=web .
+        flutter pub get  
+        flutter build web --release 
       working-directory: ${{ github.workspace }}/client
-    
-    - name: Upload to artifacts (Linux)
-      if: startsWith(matrix.os, 'ubuntu')
-      uses: actions/upload-artifact@v2
-      with:
-        name: Linux-Client
-        path: ${{ github.workspace }}/client/build/linux/x64/release/bundle
 
-    - name: Upload to artifacts (Windows)
-      if: startsWith(matrix.os, 'windows')
+    - name: Upload to artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Windows-Client
-        path: ${{ github.workspace }}/client/build/windows/runner/Release
+        name: UI
+        path: ${{ github.workspace }}/client/build/web
 
 
   make-linux-bundle:  
@@ -147,25 +115,24 @@ jobs:
     - name: Create directories
       run: |
         mkdir yakuSwap-linux
-        mkdir yakuSwap-linux/client
-        mkdir yakuSwap-linux/server
+        mkdir yakuSwap-linux/html
 
-    - name: Download Linux client
+    - name: Download UI
       uses: actions/download-artifact@v2
       with: 
-        name: Linux-Client
-        path: yakuSwap-linux/client
+        name: UI
+        path: yakuSwap-linux/html
 
-    - name: Download Linux server
+    - name: Download Linux app
       uses: actions/download-artifact@v2
       with: 
-        name: Linux-Server
-        path: yakuSwap-linux/server
+        name: Linux-App
+        path: yakuSwap-linux
 
     - name: Rename client & mark as executable
       run: |
-        mv yakuSwap-linux/client/client yakuSwap-linux/client/yakuSwap-client
-        chmod +x yakuSwap-linux/client/yakuSwap-client
+        mv yakuSwap-linux/client yakuSwap-linux/yakuSwap
+        chmod +x yakuSwap-linux/yakuSwap
 
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
@@ -181,24 +148,23 @@ jobs:
     - name: Create directories
       run: |
         mkdir yakuSwap-windows
-        mkdir yakuSwap-windows/client
-        mkdir yakuSwap-windows/server
+        mkdir yakuSwap-windows/html
 
     - name: Download Windows client
       uses: actions/download-artifact@v2
       with: 
         name: Windows-Client
-        path: yakuSwap-windows/client
+        path: yakuSwap-windows/
 
     - name: Download Windows server
       uses: actions/download-artifact@v2
       with: 
         name: Windows-Server
-        path: yakuSwap-windows/server
+        path: yakuSwap-windows/html
 
     - name: Rename client
       run: |
-        mv yakuSwap-windows/client/client.exe yakuSwap-windows/client/yakuSwap-client.exe
+        mv yakuSwap-windows/client.exe yakuSwap-windows/yakuSwap.exe
 
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
@@ -224,7 +190,7 @@ jobs:
         path: yakuSwap-linux
 
     - name: Zip Linux bundle
-      run: zip -r yakuSwap-linux.zip yakuSwap-linux/*
+      run: zip -r yakuSwap-linux.zip yakuSwap-linux
 
     - name: Download Windows bundle
       uses: actions/download-artifact@v2
@@ -233,7 +199,7 @@ jobs:
         path: yakuSwap-windows
 
     - name: Zip Windows bundle
-      run: zip -r yakuSwap-windows.zip yakuSwap-windows/*
+      run: zip -r yakuSwap-windows.zip yakuSwap-windows
 
     - name: Create Release
       id: create_release
