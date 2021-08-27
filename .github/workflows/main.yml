@@ -107,7 +107,7 @@ jobs:
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: UI
+        name: html
         path: ${{ github.workspace }}/client/build/web
 
 
@@ -123,7 +123,7 @@ jobs:
     - name: Download UI
       uses: actions/download-artifact@v2
       with: 
-        name: UI
+        name: html
         path: yakuSwap-linux/html
 
     - name: Download Linux app
@@ -132,10 +132,8 @@ jobs:
         name: Linux-App
         path: yakuSwap-linux
 
-    - name: Rename client & mark as executable
-      run: |
-        mv yakuSwap-linux/client yakuSwap-linux/yakuSwap
-        chmod +x yakuSwap-linux/yakuSwap
+    - name: Mark as executable
+      run: chmod +x yakuSwap-linux/yakuSwap
 
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
@@ -153,21 +151,17 @@ jobs:
         mkdir yakuSwap-windows
         mkdir yakuSwap-windows/html
 
-    - name: Download Windows client
+    - name: Download UI
       uses: actions/download-artifact@v2
       with: 
-        name: Windows-Client
-        path: yakuSwap-windows/
-
-    - name: Download Windows server
-      uses: actions/download-artifact@v2
-      with: 
-        name: Windows-Server
+        name: html
         path: yakuSwap-windows/html
 
-    - name: Rename client
-      run: |
-        mv yakuSwap-windows/client.exe yakuSwap-windows/yakuSwap.exe
+    - name: Download Windows app
+      uses: actions/download-artifact@v2
+      with: 
+        name: Windows-App
+        path: yakuSwap-windows/
 
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
