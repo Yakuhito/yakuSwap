@@ -132,9 +132,6 @@ jobs:
         name: Linux-App
         path: yakuSwap-linux
 
-    - name: Mark as executable
-      run: chmod +x yakuSwap-linux/yakuSwap
-
     - name: Upload to artifacts
       uses: actions/upload-artifact@v2
       with:
