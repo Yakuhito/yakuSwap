@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
 import 'package:yakuswap/repositories/allinone.dart';
 import 'package:yakuswap/screens/currencies.dart';
+import 'package:yakuswap/screens/eth_trades.dart';
 import 'package:yakuswap/screens/trades.dart';
 
 void main() {
@@ -38,7 +39,7 @@ class _TabController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text('yakuSwap'),
@@ -46,7 +47,8 @@ class _TabController extends StatelessWidget {
           bottom: TabBar(
             tabs: [
               Tab(text: 'Currencies'),
-              Tab(text: 'Trades'),
+              Tab(text: 'Fork Trades'),
+              Tab(text: 'XCH - ETH'),
             ],
           ),
           actions: [
@@ -62,11 +64,17 @@ class _TabController extends StatelessWidget {
             right: 16.0,
             top: 24.0,
           ),
-          child: TabBarView(
-            children: [
-              CurrenciesScreen(),
-              TradesScreen(),
-            ],
+          child: Center(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width / 3,
+              child: TabBarView(
+                children: [
+                  CurrenciesScreen(),
+                  TradesScreen(),
+                  EthTrades(),
+                ],
+              ),
+            ),
           ),
         ),
       ),

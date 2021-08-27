@@ -26,13 +26,31 @@ class TradesScreen extends StatelessWidget {
             child: Text('Error while fetching trades. Is the server running?'),
           );
         return ListView.builder(
-          itemCount: state.trades!.length + 1,
+          itemCount: state.trades!.length + 2,
           itemBuilder: (context, index) {
             if(index == state.trades!.length)
               return Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                padding: const EdgeInsets.only(top: 8.0),
                 child: OutlinedButton.icon(
                   label: Text('Add new trade'),
+                  icon: Icon(Icons.add),
+                  onPressed: () async {
+                    final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
+                     builder: (context) => TradeScreen(),
+                    ));
+                    
+                    if(result != null && result is Trade) {
+                      final Trade t = result;
+                      BlocProvider.of<CurrenciesAndTradesCubit>(context).updateTrade(newTrade: t);
+                    }
+                  },
+                ),
+              );
+            if(index == state.trades!.length + 1)
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                child: OutlinedButton.icon(
+                  label: Text('Create new trade (advanced)'),
                   icon: Icon(Icons.add),
                   onPressed: () async {
                     final dynamic result = await Navigator.of(context).push(MaterialPageRoute(

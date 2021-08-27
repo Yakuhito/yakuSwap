@@ -30,8 +30,14 @@ class TradeScreen extends StatelessWidget {
       ),
       body: BlocProvider<TradeCubit>(
         create: (context) => TradeCubit(trade: trade),
-        child: _Body(
-          showDeleteButton: trade != null,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 3.0,
+            child: _Body(
+              showDeleteButton: trade != null,
+            ),
+          ),
         ),
       ),
     );

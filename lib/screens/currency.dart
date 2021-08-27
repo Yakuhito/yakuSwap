@@ -28,8 +28,14 @@ class CurrencyScreen extends StatelessWidget {
       ),
       body: BlocProvider<CurrencyCubit>(
         create: (context) => CurrencyCubit(currency: currency),
-        child: _Body(
-          showDeleteButton: currency != null,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 3.0,
+            child: _Body(
+              showDeleteButton: currency != null,
+            ),
+          ),
         ),
       ),
     );

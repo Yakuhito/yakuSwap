@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:formz/formz.dart';
 
 class DirectoryInput extends FormzInput<String, String> {
@@ -11,8 +9,8 @@ class DirectoryInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(Directory(value).existsSync())
+    if(value[0] == "/" || value.contains(":/") || value.contains(":\\")) // good enough to prevent most errors
       return null;
-    return "That's not a directory";
+    return "Please use an absolute path";
   }
 }
