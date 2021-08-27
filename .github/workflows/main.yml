@@ -91,6 +91,9 @@ jobs:
       run: git fetch origin +refs/tags/*:refs/tags/*
       working-directory: ${{ github.workspace }}/flutter
 
+    - name: Add Flutter to path
+      run: echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+
     - name: Enable web support  
       run: flutter config --enable-web
     
