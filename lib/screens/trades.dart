@@ -5,6 +5,7 @@ import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
 import 'package:yakuswap/models/currency.dart';
 import 'package:yakuswap/models/trade.dart';
 import 'package:yakuswap/screens/trade.dart';
+import 'package:yakuswap/screens/trade_simple.dart';
 import 'package:yakuswap/screens/trade_status.dart';
 
 class TradesScreen extends StatelessWidget {
@@ -36,7 +37,7 @@ class TradesScreen extends StatelessWidget {
                   icon: Icon(Icons.add),
                   onPressed: () async {
                     final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
-                     builder: (context) => TradeScreen(),
+                     builder: (context) => TradeSimpleScreen(),
                     ));
                     
                     if(result != null && result is Trade) {
