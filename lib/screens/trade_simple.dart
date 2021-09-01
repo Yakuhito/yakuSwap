@@ -23,6 +23,7 @@ class TradeSimpleScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("New trade"),
+        centerTitle: true,
       ),
       body: BlocProvider<TradeCubit>(
         create: (context) => TradeCubit(trade: trade),
@@ -91,14 +92,14 @@ class __BodyState extends State<_Body> {
                     DropdownMenuItem<bool>(
                       value: true,
                       child: Text(
-                        "I want to buy a fork with XCH",
+                        "I want to buy a fork coin with XCH",
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
                     DropdownMenuItem<bool>(
                       value: false,
                       child: Text(
-                        "I want to buy XCH with a fork",
+                        "I want to buy XCH with a fork coin",
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
@@ -290,9 +291,15 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
     final int units = (amnt / currency.unitsPerCoin).floor();
     String s = "$units.";
     amnt = amnt - units * currency.unitsPerCoin;
+    bool amntModified = amnt == 0;
+    if(amntModified) amnt = 1;
     for(int pow = 1; pow * amnt * 10 < currency.unitsPerCoin; pow *= 10)
       s += "0";
-    s += "$amnt ${currency.addressPrefix.toUpperCase()} (maximum fee: $feeAmnt mojo)";
+    if(amntModified)
+      s += "0";
+    else
+      s += "$amnt";
+    s += "${currency.addressPrefix.toUpperCase()} (maximum fee: $feeAmnt mojo)";
     return s;
   }
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:yakuswap/models/currency.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:yakuswap/models/eth_trade.dart';
 import 'package:yakuswap/models/full_node_connection.dart';
 import 'package:yakuswap/models/trade.dart';
 import 'package:yakuswap/models/trade_status.dart';
@@ -90,5 +91,28 @@ class AllInOneRepository {
 
   Future<void> deleteTrade({required String id}) async {
     await http.delete(Uri.parse("$API_HOST/trade/$id"));
+  }
+
+  Future<void> putAddress({required String address}) async {
+    await http.put(
+      Uri.parse("$API_HOST/eth/address"),
+      body: jsonEncode({"address": address}),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+
+  Future<List<EthTrade>> getEthTrades() async {
+    List<EthTrade> ret = [];
+
+    final http.Response res = await http.get(Uri.parse("$API_HOST/eth/trades"));
+    final Map<String, dynamic> parsed = jsonDecode(res.body);
+    final List<Map<String, dynamic>> trades = List<Map<String, dynamic>>.from(parsed['trades']);
+
+    for(int i = 0; i < trades.length; ++i)
+      ret.add(EthTrade.fromJSON(trades[i]));
+
+    return ret;
   }
 }

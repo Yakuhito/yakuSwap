@@ -27,6 +27,7 @@ class TradeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(trade != null ? "Edit trade" : "New trade"),
+        centerTitle: true,
       ),
       body: BlocProvider<TradeCubit>(
         create: (context) => TradeCubit(trade: trade),
@@ -516,9 +517,15 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
     final int units = (amnt / currency.unitsPerCoin).floor();
     String s = "$units.";
     amnt = amnt - units * currency.unitsPerCoin;
+    bool amntModified = amnt == 0;
+    if(amntModified) amnt = 1;
     for(int pow = 1; pow * amnt * 10 < currency.unitsPerCoin; pow *= 10)
       s += "0";
-    s += "$amnt ${currency.addressPrefix.toUpperCase()}";
+    if(amntModified)
+      s += "0";
+    else
+      s += "$amnt";
+    s += " ${currency.addressPrefix.toUpperCase()}";
     return s;
   }
 

@@ -25,6 +25,7 @@ class CurrencyScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(currency != null ? "Edit currency" : "New currency"),
+        centerTitle: true,
       ),
       body: BlocProvider<CurrencyCubit>(
         create: (context) => CurrencyCubit(currency: currency),

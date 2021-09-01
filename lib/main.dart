@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
+import 'package:yakuswap/cubits/eth/cubit.dart';
 import 'package:yakuswap/repositories/allinone.dart';
+import 'package:yakuswap/repositories/eth.dart';
 import 'package:yakuswap/screens/currencies.dart';
 import 'package:yakuswap/screens/eth_trades.dart';
 import 'package:yakuswap/screens/trades.dart';
@@ -15,11 +17,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final AllInOneRepository repo = AllInOneRepository();
-    return BlocProvider<CurrenciesAndTradesCubit>(
-      create: (context) => CurrenciesAndTradesCubit( repository: repo)..initialize(),
-      child: RepositoryProvider<AllInOneRepository>(
-        create: (context) => repo,
+    final AllInOneRepository allInOneRepo = AllInOneRepository();
+    final EthRepository ethRepo = EthRepository();
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CurrenciesAndTradesCubit(repository: allInOneRepo)..initialize(),
+        ),
+        BlocProvider(
+          create: (context) => EthCubit(allInOneRepository: allInOneRepo, ethRepository: ethRepo)..initialize(),
+        ),
+      ],
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(
+            create: (context) => allInOneRepo,
+          ),
+          RepositoryProvider(
+            create: (context) => ethRepo,
+          ),
+        ],
         child: MaterialApp(
           title: 'yakuSwap',
           debugShowCheckedModeBanner: false,
@@ -54,7 +72,10 @@ class _TabController extends StatelessWidget {
           actions: [
             Builder(builder: (context) => IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () => BlocProvider.of<CurrenciesAndTradesCubit>(context).refresh(),
+              onPressed: () {
+                 BlocProvider.of<CurrenciesAndTradesCubit>(context).refresh();
+                 BlocProvider.of<EthCubit>(context).refresh();
+              },
             )),
           ],
         ),
