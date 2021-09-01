@@ -20,8 +20,19 @@ class TradeCubit extends Cubit<TradeState> {
     try {
       final Map<String, dynamic> json = jsonDecode(rawData);
       final Trade trade = Trade.fromJSON(json);
-      final TradeState newState = TradeState(form: TradeForm.fromTrade(trade: trade), forceReload: true);
+      String warning = "";
 
+      if(trade.tradeCurrencyOne.fee < (trade.tradeCurrencyOne.totalAmount / 10000).ceil() ||
+        trade.tradeCurrencyOne.maxBlockHeight != 192 ||
+        trade.tradeCurrencyOne.minConfirmationHeight != 32 ||
+        trade.tradeCurrencyTwo.fee < (trade.tradeCurrencyTwo.totalAmount / 10000).ceil() ||
+        trade.tradeCurrencyTwo.maxBlockHeight != 192 ||
+        trade.tradeCurrencyTwo.minConfirmationHeight != 32 ||
+        trade.step != 0) {
+        warning = "WARNING: Imported trade contains some non-default parameters that you mign not be able to see - proceed with extreme caution ONLY IF you know what you are doing.";
+      }
+
+      final TradeState newState = TradeState(form: TradeForm.fromTrade(trade: trade), forceReload: true, warning: warning);
       emit(newState);
 
       message = "Import from clipboard successful.";

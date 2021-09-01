@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yakuswap/cubits/currencies_and_trades/cubit.dart';
 import 'package:yakuswap/cubits/eth/cubit.dart';
+import 'package:yakuswap/models/currency.dart';
 import 'package:yakuswap/models/eth_trade.dart';
 import 'package:yakuswap/screens/eth_trade.dart';
+import 'package:yakuswap/screens/trade_status.dart';
 
 class EthTrades extends StatelessWidget {
   const EthTrades({ Key? key }) : super(key: key);
@@ -103,6 +107,60 @@ class _TradeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final List<Currency> currencies = BlocProvider.of<CurrenciesAndTradesCubit>(context).state.currencies!;
+    final Currency currency = currencies.firstWhere((element) => element.addressPrefix == trade.tradeCurrency.addressPrefix);
+    const String ethUrl = "https://raw.githubusercontent.com/ethereum/ethereum-org-website/dev/src/assets/assets/eth-diamond-black-white.svg";
+    final String url1 = trade.isBuyer ? currency.photoUrl : ethUrl;
+    final String url2 = trade.isBuyer ? ethUrl : currency.photoUrl;
+    
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: ListTile(
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AspectRatio(
+                aspectRatio: 1.0,
+                child: Center(child: url1.endsWith(".svg")? SvgPicture.network(url1) : Image.network(url1))
+            ),
+            const Icon(Icons.swap_horiz),
+            AspectRatio(
+                aspectRatio: 1.0,
+                child: Center(child: url2.endsWith(".svg")? SvgPicture.network(url2) : Image.network(url2))
+            ),
+          ],
+        ),
+        title: Text("${trade.tradeCurrency.totalAmount / currency.unitsPerCoin} XCH for ${trade.totalWei / 1000000000000000000} ETH"),
+        subtitle: Text("${trade.id}\n" + (trade.isBuyer ? "Initiated by you" : "Initiated by someone else")),
+        isThreeLine: true,
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.grey[400]!, width: 1),
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+        trailing: IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () async {
+            final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EthTradeScreen(trade: trade),
+            ));
+
+            if(result != null && result is EthTrade) {
+              final EthTrade t = result;
+              BlocProvider.of<EthCubit>(context).updateTrade(trade: t);
+            } else if(result == true) {
+              BlocProvider.of<EthCubit>(context).deleteTrade(id: trade.id);
+            }
+          },
+        ),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => TradeStatusScreen(
+              tradeId: trade.id,
+              ethTrade: true,
+            ),
+          ));
+        },
+      ),
+    );
   }
 }

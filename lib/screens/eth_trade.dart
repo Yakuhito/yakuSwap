@@ -47,6 +47,7 @@ class _Screen extends StatelessWidget {
                 form: state.form,
                 showDeleteButton: showDeleteButton,
                 canSubmit: state.canSubmit,
+                warning: state.warning,
               ),
             ),
           ),
@@ -60,11 +61,13 @@ class _Body extends StatefulWidget {
   final bool showDeleteButton;
   final bool canSubmit;
   final EthTradeForm form;
+  final String? warning;
 
   const _Body({
     required this.form,
     this.showDeleteButton = false,
     this.canSubmit = false,
+    this.warning,
     Key? key
   }) : super(key: key);
 
@@ -305,6 +308,13 @@ class __BodyState extends State<_Body> {
                 onChanged: (newVal) => BlocProvider.of<EthTradeCubit>(context).changeEthTotalWei(newVal),
               ),
               const SizedBox(height: 16.0),
+              widget.warning != null ? Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Text(
+                  widget.warning!,
+                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red),
+                ),
+              ) : const SizedBox.shrink(),
               ElevatedButton(
                 child: const Text("Save"),
                 onPressed: widget.canSubmit ? () {

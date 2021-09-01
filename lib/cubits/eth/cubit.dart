@@ -38,6 +38,14 @@ class EthCubit extends Cubit<EthState> {
   }
 
   Future<void> updateTrade({required EthTrade trade}) async {
-    
+    emit(const EthState.loading());
+    await allInOneRepository.putEthTrade(trade: trade);
+    refresh();
+  }
+
+  Future<void> deleteTrade({required String id}) async {
+    emit(const EthState.loading());
+    await allInOneRepository.deleteEthTrade(id: id);
+    refresh();
   }
 }

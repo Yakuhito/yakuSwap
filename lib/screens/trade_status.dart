@@ -7,8 +7,9 @@ import 'package:yakuswap/repositories/allinone.dart';
 
 class TradeStatusScreen extends StatelessWidget {
   final String tradeId;
+  final bool ethTrade;
 
-  const TradeStatusScreen({required this.tradeId, Key? key}) : super(key: key);
+  const TradeStatusScreen({required this.tradeId, this.ethTrade = false, key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class TradeStatusScreen extends StatelessWidget {
       create: (context) => TradeStatusCubit(
         tradeId: tradeId,
         allInOneRepository: RepositoryProvider.of<AllInOneRepository>(context),
+        ethTrade: ethTrade,
       ),
       child: Scaffold(
         appBar: AppBar(

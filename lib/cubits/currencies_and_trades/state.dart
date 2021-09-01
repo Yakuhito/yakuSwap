@@ -5,7 +5,7 @@ enum CurrenciesAndTradesStatus {loading, loaded, loadError}
 class CurrenciesAndTradesState extends Equatable {
   final CurrenciesAndTradesStatus status;
   final List<Currency>? currencies;
-  final List<Trade>? trades;
+  final List<Trade>? trades;  
   final List<FullNodeConnection>? connections;
 
   const CurrenciesAndTradesState._({

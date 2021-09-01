@@ -26,8 +26,9 @@ class EthTradeCubit extends Cubit<EthTradeState> {
 
       if(trade.tradeCurrency.fee < (trade.tradeCurrency.totalAmount / 10000).ceil() ||
         trade.tradeCurrency.maxBlockHeight != 192 ||
-        trade.tradeCurrency.minConfirmationHeight != 32) {
-        warning = "WARNING: Imported trade contains some non-default parameters that you don't see - proceed with extreme caution only if you know what you are doing.";
+        trade.tradeCurrency.minConfirmationHeight != 32 ||
+        trade.step != 0) {
+        warning = "WARNING: Imported trade contains some non-default parameters that you don't see - proceed with extreme caution ONLY IF you know what you are doing.";
       }
 
       final EthTradeState newState = EthTradeState(form: EthTradeForm.fromTrade(trade: trade), forceReload: true, warning: warning);

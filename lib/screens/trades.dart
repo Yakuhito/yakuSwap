@@ -96,12 +96,12 @@ class _TradeTile extends StatelessWidget {
           children: [
             AspectRatio(
                 aspectRatio: 1.0,
-                child: Center(child: SvgPicture.network(currencyOne.photoUrl))
+                child:  Center(child: currencyOne.photoUrl.endsWith(".svg")? SvgPicture.network(currencyOne.photoUrl) : Image.network(currencyOne.photoUrl))
             ),
             const Icon(Icons.swap_horiz),
             AspectRatio(
                 aspectRatio: 1.0,
-                child: Center(child: SvgPicture.network(currencyTwo.photoUrl))
+                child:  Center(child: currencyOne.photoUrl.endsWith(".svg")? SvgPicture.network(currencyOne.photoUrl) : Image.network(currencyOne.photoUrl))
             ),
           ],
         ),

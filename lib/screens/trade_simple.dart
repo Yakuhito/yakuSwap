@@ -119,6 +119,13 @@ class __BodyState extends State<_Body> {
                 onFormChanged: (newForm) => BlocProvider.of<TradeCubit>(context).changeTradeCurrencyTwo(newForm),
               ),
               const SizedBox(height: 16.0),
+              state.warning != null ? Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Text(
+                  state.warning!,
+                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red),
+                ),
+              ) : const SizedBox.shrink(),
               ElevatedButton(
                 child: const Text("Save"),
                 onPressed: state.canSubmit

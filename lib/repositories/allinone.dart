@@ -120,4 +120,30 @@ class AllInOneRepository {
 
     return ret;
   }
+
+  Future<TradeStatus> getEthTrade({required String tradeId}) async {
+    try {
+      final http.Response resp = await http.get(Uri.parse("$API_HOST/eth/trade/$tradeId"));
+      return TradeStatus.fromJSON(jsonDecode(resp.body));
+    } catch(_) {
+      return const TradeStatus(
+        address: null,
+        message: "Error while fetchng status. Retrying in 1s..."
+      );
+    }
+  }
+
+  Future<void> putEthTrade({required EthTrade trade}) async {
+    await http.put(
+      Uri.parse("$API_HOST/eth/trade/${trade.id}"),
+      body: jsonEncode(trade.toJSON()..remove("id")),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+
+  Future<void> deleteEthTrade({required String id}) async {
+    await http.delete(Uri.parse("$API_HOST/eth/trade/$id"));
+  }
 }
