@@ -32,23 +32,23 @@ class TradeForm with FormzMixin {
 
     return copyWith(
       id:  IdInput.dirty(value: id),
-      tradeCurrencyOne: TradeCurrencyForm(id: IdInput.dirty(value: "$id-1"), addressPrefix: AddressPrefixInput.dirty(value: "xch")),
-      tradeCurrencyTwo: TradeCurrencyForm(id: IdInput.dirty(value: "$id-2"), addressPrefix: AddressPrefixInput.dirty(value: "xch")),
+      tradeCurrencyOne: TradeCurrencyForm(id: IdInput.dirty(value: "$id-1"), addressPrefix: const AddressPrefixInput.dirty(value: "xch")),
+      tradeCurrencyTwo: TradeCurrencyForm(id: IdInput.dirty(value: "$id-2"), addressPrefix: const AddressPrefixInput.dirty(value: "xch")),
       secret: SecretInput.dirty(value: secret),
       secretHash: HashInput.forSecret(secret: secret),
-      step: StepInput.dirty(value: "0"),
+      step: const StepInput.dirty(value: "0"),
       isBuyer: true,
     );
   }
 
   TradeForm.fromTrade({required Trade trade}) :
-    this.id = IdInput.dirty(value: trade.id),
-    this.tradeCurrencyOne = TradeCurrencyForm.fromTradeCurrency(tradeCurrency: trade.tradeCurrencyOne),
-    this.tradeCurrencyTwo = TradeCurrencyForm.fromTradeCurrency(tradeCurrency: trade.tradeCurrencyTwo),
-    this.secretHash = HashInput.dirty(value: trade.secretHash),
-    this.secret = SecretInput.dirty(value: trade.secret ?? ""),
-    this.step = StepInput.dirty(value: "${trade.step}"),
-    this.isBuyer = trade.isBuyer;
+    id = IdInput.dirty(value: trade.id),
+    tradeCurrencyOne = TradeCurrencyForm.fromTradeCurrency(tradeCurrency: trade.tradeCurrencyOne),
+    tradeCurrencyTwo = TradeCurrencyForm.fromTradeCurrency(tradeCurrency: trade.tradeCurrencyTwo),
+    secretHash = HashInput.dirty(value: trade.secretHash),
+    secret = SecretInput.dirty(value: trade.secret ?? ""),
+    step = StepInput.dirty(value: "${trade.step}"),
+    isBuyer = trade.isBuyer;
 
   TradeForm copyWith({
     IdInput? id,
@@ -73,7 +73,7 @@ class TradeForm with FormzMixin {
     tradeCurrencyOne: tradeCurrencyOne.toTradeCurrency()!,
     tradeCurrencyTwo: tradeCurrencyTwo.toTradeCurrency()!,
     secretHash: secretHash.value,
-    secret: secret.value.length == 0 ? null : secret.value,
+    secret: secret.value.isEmpty ? null : secret.value,
     step: int.parse(step.value),
     isBuyer: isBuyer,
   ) : null;

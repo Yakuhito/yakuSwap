@@ -1,5 +1,6 @@
 import 'package:formz/formz.dart';
 
+// ignore: constant_identifier_names
 const ALPHABET = "0123456789";
 
 class TransactionAmountInput extends FormzInput<String, String> {
@@ -11,15 +12,20 @@ class TransactionAmountInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(value.contains("."))
+    if(value.contains(".")) {
       return "Please use mojo / smallest unit to specify the amount!";
-    if(value.length == 0)
+    }
+    if(value.isEmpty) {
       return "Uh...";
-    if(value.length > 32)
+    }
+    if(value.length > 32) {
       return "Hm...";
-    for(int i = 0;i < value.length; ++i)
-      if(!ALPHABET.contains(value[i]))
+    }
+    for(int i = 0;i < value.length; ++i) {
+      if(!ALPHABET.contains(value[i])) {
         return "That's not a number!";
+      }
+    }
     return null;
   }
 }

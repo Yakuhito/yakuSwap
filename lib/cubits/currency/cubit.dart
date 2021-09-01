@@ -19,7 +19,7 @@ import 'package:yakuswap/models/inputs/units_per_coin.dart';
 part 'state.dart';
 
 class CurrencyCubit extends Cubit<CurrencyState> {
-  CurrencyCubit({Currency? currency}) : super(currency == null ? CurrencyState(form: CurrencyForm()) :
+  CurrencyCubit({Currency? currency}) : super(currency == null ? const CurrencyState(form: CurrencyForm()) :
     CurrencyState(form: CurrencyForm.fromCurrency(currency: currency)));
 
   String import(String rawData) {

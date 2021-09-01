@@ -11,24 +11,27 @@ class EthTrades extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EthCubit, EthState>(
       builder: (context, state) {
-        if(state.status == EthStatus.loading)
-          return Center(
+        if(state.status == EthStatus.loading) {
+          return const Center(
             child: CircularProgressIndicator(),
           );
-        if (state.status == EthStatus.load_error)
-          return Center(
+        }
+        if (state.status == EthStatus.loadError) {
+          return const Center(
             child: Text('Error :('),
           );
-        if(!state.walletConnected)
+        }
+        if(!state.walletConnected) {
           return Center(
             child: ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Text("Connect with MetaMask", style: TextStyle(color: Colors.white)),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text("Connect with MetaMask", style: TextStyle(color: Colors.white)),
               ),
               onPressed: () => BlocProvider.of<EthCubit>(context).refresh(connectWallet: true),
             ),
           );
+        }
         return SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -55,27 +58,28 @@ class _EthTradesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(trades == null)
-      return Center(
+    if(trades == null) {
+      return const Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 16.0),
+          padding: EdgeInsets.only(top: 16.0),
           child: CircularProgressIndicator(),
         ),
       );
+    }
     return ListView.builder(
       shrinkWrap: true,
       primary: false,
       itemCount: trades!.length + 1,
       itemBuilder: (context, index) {
-        if(index == trades!.length)
+        if(index == trades!.length) {
           return Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: OutlinedButton.icon(
-              label: Text('Add new trade'),
-              icon: Icon(Icons.add),
+              label: const Text('Add new trade'),
+              icon: const Icon(Icons.add),
               onPressed: () async {
                     final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
-                     builder: (context) => EthTradeScreen(),
+                     builder: (context) => const EthTradeScreen(),
                     ));
                     
                     if(result != null && result is EthTrade) {
@@ -85,6 +89,7 @@ class _EthTradesList extends StatelessWidget {
               },
             ),
           );
+        }
         return _TradeTile(trade: trades![index]);
       },
     );

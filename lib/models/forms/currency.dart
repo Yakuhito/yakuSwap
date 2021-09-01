@@ -37,16 +37,16 @@ class CurrencyForm with FormzMixin {
   });
   
   CurrencyForm.fromCurrency({required Currency currency}) :
-    this.addressPrefix = AddressPrefixInput.dirty(value: currency.addressPrefix),
-    this.name = NameInput.dirty(value: currency.name),
-    this.photoURL = PhotoURLInput.dirty(value: currency.photoUrl),
-    this.unitsPerCoin = UnitsPerCoinInput.dirty(value: "${currency.unitsPerCoin}"),
-    this.minFee = FeeInput.dirty(value: "${currency.minFee}"),
-    this.defaultMaxBlockHeight = MaxBlockHeightInput.dirty(value: "${currency.defaultMaxBlockHeight}"),
-    this.defaultMinConfirmationHeight = MinConfirmationHeightInput.dirty(value: "${currency.defaultMinConfirmationHeight}"),
-    this.host = HostInput.dirty(value: currency.host),
-    this.port = PortInput.dirty(value: "${currency.port}"),
-    this.sslDirectory = DirectoryInput.dirty(value: currency.sslDirectory);
+    addressPrefix = AddressPrefixInput.dirty(value: currency.addressPrefix),
+    name = NameInput.dirty(value: currency.name),
+    photoURL = PhotoURLInput.dirty(value: currency.photoUrl),
+    unitsPerCoin = UnitsPerCoinInput.dirty(value: "${currency.unitsPerCoin}"),
+    minFee = FeeInput.dirty(value: "${currency.minFee}"),
+    defaultMaxBlockHeight = MaxBlockHeightInput.dirty(value: "${currency.defaultMaxBlockHeight}"),
+    defaultMinConfirmationHeight = MinConfirmationHeightInput.dirty(value: "${currency.defaultMinConfirmationHeight}"),
+    host = HostInput.dirty(value: currency.host),
+    port = PortInput.dirty(value: "${currency.port}"),
+    sslDirectory = DirectoryInput.dirty(value: currency.sslDirectory);
 
   CurrencyForm copyWith({
     AddressPrefixInput? addressPrefix,

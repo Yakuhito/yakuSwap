@@ -10,8 +10,8 @@ class TradeStatus extends Equatable {
   });
 
   TradeStatus.fromJSON(Map<String, dynamic> data) :
-    this.message = data['message'],
-    this.address = data['address'];
+    message = data['message'],
+    address = data['address'];
 
   @override
   List<Object?> get props => [message, address];

@@ -12,6 +12,7 @@ import 'package:yakuswap/models/trade_status.dart';
 // todo: api host offline
 
 class AllInOneRepository {
+  // ignore: constant_identifier_names
   static const String API_HOST = "http://127.0.0.1:4143/api";
 
   Future<List<Currency>> getCurrencies() async {
@@ -21,8 +22,9 @@ class AllInOneRepository {
     final Map<String, dynamic> parsed = jsonDecode(res.body);
     final List<Map<String, dynamic>> currencies = List<Map<String, dynamic>>.from(parsed['currencies']);
 
-    for(int i = 0; i < currencies.length; ++i)
+    for(int i = 0; i < currencies.length; ++i) {
       ret.add(Currency.fromJSON(currencies[i]));
+    }
 
     return ret;
   }
@@ -34,8 +36,9 @@ class AllInOneRepository {
     final Map<String, dynamic> parsed = jsonDecode(res.body);
     final List<Map<String, dynamic>> trades = List<Map<String, dynamic>>.from(parsed['trades']);
 
-    for(int i = 0; i < trades.length; ++i)
+    for(int i = 0; i < trades.length; ++i) {
       ret.add(Trade.fromJSON(trades[i]));
+    }
 
     return ret;
   }
@@ -47,8 +50,9 @@ class AllInOneRepository {
     final Map<String, dynamic> parsed = jsonDecode(res.body);
     final List<Map<String, dynamic>> connections = List<Map<String, dynamic>>.from(parsed['connections']);
 
-    for(int i = 0; i < connections.length; ++i)
+    for(int i = 0; i < connections.length; ++i) {
       ret.add(FullNodeConnection.fromJSON(connections[i]));
+    }
 
     return ret;
   }
@@ -72,7 +76,7 @@ class AllInOneRepository {
       final http.Response resp = await http.get(Uri.parse("$API_HOST/trade/$tradeId"));
       return TradeStatus.fromJSON(jsonDecode(resp.body));
     } catch(_) {
-      return TradeStatus(
+      return const TradeStatus(
         address: null,
         message: "Error while fetchng status. Retrying in 1s..."
       );
@@ -110,8 +114,9 @@ class AllInOneRepository {
     final Map<String, dynamic> parsed = jsonDecode(res.body);
     final List<Map<String, dynamic>> trades = List<Map<String, dynamic>>.from(parsed['trades']);
 
-    for(int i = 0; i < trades.length; ++i)
+    for(int i = 0; i < trades.length; ++i) {
       ret.add(EthTrade.fromJSON(trades[i]));
+    }
 
     return ret;
   }

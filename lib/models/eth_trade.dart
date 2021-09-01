@@ -12,7 +12,7 @@ class EthTrade extends Equatable {
   final String? secret;
   final int step;
 
-  EthTrade({
+  const EthTrade({
     required this.id,
     required this.tradeCurrency,
     required this.ethFromAddress,
@@ -25,36 +25,36 @@ class EthTrade extends Equatable {
   });
 
   EthTrade.fromJSON(Map<String, dynamic> data) :
-    this.id = data['id'],
-    this.tradeCurrency = TradeCurrency.fromJSON(data['trade_currency']),
-    this.ethFromAddress = data['eth_from_address'],
-    this.ethToAddress = data['eth_to_address'],
-    this.totalWei = data['total_wei'],
-    this.secretHash = data['secret_hash'],
-    this.isBuyer = data['is_buyer'],
-    this.secret = data['secret'],
-    this.step = data['step'];
+    id = data['id'],
+    tradeCurrency = TradeCurrency.fromJSON(data['trade_currency']),
+    ethFromAddress = data['eth_from_address'],
+    ethToAddress = data['eth_to_address'],
+    totalWei = data['total_wei'],
+    secretHash = data['secret_hash'],
+    isBuyer = data['is_buyer'],
+    secret = data['secret'],
+    step = data['step'];
 
   Map<String, dynamic> toJSON() => {
-    'id': this.id,
-    'trade_currency': this.tradeCurrency.toJSON(),
-    'eth_from_address': this.ethFromAddress,
-    'eth_to_address': this.ethToAddress,
-    'total_wei': this.totalWei,
-    'secret_hash': this.secretHash,
-    'is_buyer': this.isBuyer,
-    'secret': this.secret,
-    'step': this.step,
+    'id': id,
+    'trade_currency': tradeCurrency.toJSON(),
+    'eth_from_address': ethFromAddress,
+    'eth_to_address': ethToAddress,
+    'total_wei': totalWei,
+    'secret_hash': secretHash,
+    'is_buyer': isBuyer,
+    'secret': secret,
+    'step': step,
   };
 
   Map<String, dynamic> toSafeJSON() => {
-    'id': this.id,
-    'trade_currency': this.tradeCurrency.toJSON(),
-    'eth_from_address': this.ethFromAddress,
-    'eth_to_address': this.ethToAddress,
-    'total_wei': this.totalWei,
-    'secret_hash': this.secretHash,
-    'is_buyer': !this.isBuyer,
+    'id': id,
+    'trade_currency': tradeCurrency.toJSON(),
+    'eth_from_address': ethFromAddress,
+    'eth_to_address': ethToAddress,
+    'total_wei': totalWei,
+    'secret_hash': secretHash,
+    'is_buyer': !isBuyer,
     'secret': null,
     'step': 0,
   };

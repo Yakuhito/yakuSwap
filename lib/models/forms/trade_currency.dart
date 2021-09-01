@@ -30,14 +30,14 @@ class TradeCurrencyForm with FormzMixin {
   });
   
   TradeCurrencyForm.fromTradeCurrency({required TradeCurrency tradeCurrency}) :
-    this.id = IdInput.dirty(value: tradeCurrency.id),
-    this.addressPrefix = AddressPrefixInput.dirty(value: tradeCurrency.addressPrefix),
-    this.fee = FeeInput.dirty(value: "${tradeCurrency.fee}"),
-    this.maxBlockHeight = MaxBlockHeightInput.dirty(value: "${tradeCurrency.maxBlockHeight}"),
-    this.minConfirmationHeight = MinConfirmationHeightInput.dirty(value: "${tradeCurrency.minConfirmationHeight}"),
-    this.fromAddress = AddressInput.dirty(value: tradeCurrency.fromAddress),
-    this.toAddress = AddressInput.dirty(value: tradeCurrency.toAddress),
-    this.totalAmount = TransactionAmountInput.dirty(value: "${tradeCurrency.totalAmount}");
+    id = IdInput.dirty(value: tradeCurrency.id),
+    addressPrefix = AddressPrefixInput.dirty(value: tradeCurrency.addressPrefix),
+    fee = FeeInput.dirty(value: "${tradeCurrency.fee}"),
+    maxBlockHeight = MaxBlockHeightInput.dirty(value: "${tradeCurrency.maxBlockHeight}"),
+    minConfirmationHeight = MinConfirmationHeightInput.dirty(value: "${tradeCurrency.minConfirmationHeight}"),
+    fromAddress = AddressInput.dirty(value: tradeCurrency.fromAddress),
+    toAddress = AddressInput.dirty(value: tradeCurrency.toAddress),
+    totalAmount = TransactionAmountInput.dirty(value: "${tradeCurrency.totalAmount}");
 
   TradeCurrencyForm copyWith({
     IdInput? id,

@@ -68,8 +68,8 @@ class __BodyState extends State<_Body> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OutlinedButton.icon(
-                icon: Icon(Icons.arrow_circle_up_outlined),
-                label: Text("Export"),
+                icon: const Icon(Icons.arrow_circle_up_outlined),
+                label: const Text("Export"),
                 onPressed: () async {
                   final String exportString =
                       BlocProvider.of<TradeCubit>(context).export();
@@ -77,7 +77,7 @@ class __BodyState extends State<_Body> {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                           content: Text(
                               "Trade data copied to clipboard - the export contains your SECRET, so DO NOT SHARE IT WITH ANYBODY!")),
                     );
@@ -85,15 +85,15 @@ class __BodyState extends State<_Body> {
               ),
               const SizedBox(height: 8.0),
               OutlinedButton.icon(
-                icon: Icon(Icons.arrow_circle_down_outlined),
-                label: Text("Import"),
+                icon: const Icon(Icons.arrow_circle_down_outlined),
+                label: const Text("Import"),
                 onPressed: () async {
                   final ClipboardData? clipboardData =
                       await Clipboard.getData("text/plain");
                   final String importStr = clipboardData?.text ?? "";
                   String message = "";
 
-                  if (importStr.length > 0) {
+                  if (importStr.isNotEmpty) {
                     message =
                         BlocProvider.of<TradeCubit>(context).import(importStr);
                   } else {
@@ -108,8 +108,8 @@ class __BodyState extends State<_Body> {
               ),
               const SizedBox(height: 8.0),
               OutlinedButton.icon(
-                icon: Icon(Icons.share),
-                label: Text("Share"),
+                icon: const Icon(Icons.share),
+                label: const Text("Share"),
                 onPressed: () async {
                   final String exportString =
                       BlocProvider.of<TradeCubit>(context).safeExport();
@@ -117,7 +117,7 @@ class __BodyState extends State<_Body> {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                           content: Text(
                               "Data copied to clipboard - you can share it with your trade partner")),
                     );
@@ -146,7 +146,7 @@ class __BodyState extends State<_Body> {
                 lock: true,
               ),
               const SizedBox(height: 48.0),
-              _SectionTitle(title: "Trade Info"),
+              const _SectionTitle(title: "Trade Info"),
               TextFormField(
                 key: Key("tradeForm_id_${state.form.id.value}"),
                 initialValue: state.form.id.value,
@@ -203,7 +203,7 @@ class __BodyState extends State<_Body> {
                     child: TextFormField(
                       key: Key("tradeForm_isBuyer_${state.form.isBuyer}"),
                       initialValue: state.form.isBuyer ? "YES" : "NO",
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "Will initiate trade?",
                       ),
                       enabled: false,
@@ -231,17 +231,17 @@ class __BodyState extends State<_Body> {
                               final dynamic confirm = await showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text("Are you sure?"),
-                                  content: Text(
+                                  title: const Text("Are you sure?"),
+                                  content: const Text(
                                       "Do you really want to delete this trade?"),
                                   actions: [
                                     TextButton(
-                                      child: Text("Cancel"),
+                                      child: const Text("Cancel"),
                                       onPressed: () =>
                                           Navigator.of(context).pop(),
                                     ),
                                     TextButton(
-                                      child: Text("DELETE"),
+                                      child: const Text("DELETE"),
                                       style: TextButton.styleFrom(
                                           primary: Colors.red),
                                       onPressed: () =>
@@ -275,7 +275,7 @@ class _SectionTitle extends StatelessWidget {
       children: [
         Text(title),
         const SizedBox(width: 8.0),
-        Expanded(child: Divider()),
+        const Expanded(child: Divider()),
         comment == null ? const SizedBox.shrink() : const SizedBox(width: 8.0),
         comment == null ? const SizedBox.shrink() : Text(comment!),
       ],
@@ -519,12 +519,14 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
     amnt = amnt - units * currency.unitsPerCoin;
     bool amntModified = amnt == 0;
     if(amntModified) amnt = 1;
-    for(int pow = 1; pow * amnt * 10 < currency.unitsPerCoin; pow *= 10)
+    for(int pow = 1; pow * amnt * 10 < currency.unitsPerCoin; pow *= 10) {
       s += "0";
-    if(amntModified)
+    }
+    if(amntModified) {
       s += "0";
-    else
+    } else {
       s += "$amnt";
+    }
     s += " ${currency.addressPrefix.toUpperCase()}";
     return s;
   }

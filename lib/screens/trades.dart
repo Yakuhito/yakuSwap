@@ -18,26 +18,28 @@ class TradesScreen extends StatelessWidget {
           oldState.status != newState.status ||
           oldState.trades != newState.trades,
       builder: (context, state) {
-        if (state.status == CurrenciesAndTradesStatus.loading)
-          return Center(
+        if (state.status == CurrenciesAndTradesStatus.loading) {
+          return const Center(
             child: CircularProgressIndicator(),
           );
-        if (state.status == CurrenciesAndTradesStatus.load_error)
-          return Center(
+        }
+        if (state.status == CurrenciesAndTradesStatus.loadError) {
+          return const Center(
             child: Text('Error while fetching trades. Is the server running?'),
           );
+        }
         return ListView.builder(
           itemCount: state.trades!.length + 2,
           itemBuilder: (context, index) {
-            if(index == state.trades!.length)
+            if(index == state.trades!.length) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: OutlinedButton.icon(
-                  label: Text('Add new trade'),
-                  icon: Icon(Icons.add),
+                  label: const Text('Add new trade'),
+                  icon: const Icon(Icons.add),
                   onPressed: () async {
                     final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
-                     builder: (context) => TradeSimpleScreen(),
+                     builder: (context) => const TradeSimpleScreen(),
                     ));
                     
                     if(result != null && result is Trade) {
@@ -47,15 +49,16 @@ class TradesScreen extends StatelessWidget {
                   },
                 ),
               );
-            if(index == state.trades!.length + 1)
+            }
+            if(index == state.trades!.length + 1) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                 child: OutlinedButton.icon(
-                  label: Text('Create new trade (advanced)'),
-                  icon: Icon(Icons.add),
+                  label: const Text('Create new trade (advanced)'),
+                  icon: const Icon(Icons.add),
                   onPressed: () async {
                     final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
-                     builder: (context) => TradeScreen(),
+                     builder: (context) => const TradeScreen(),
                     ));
                     
                     if(result != null && result is Trade) {
@@ -65,6 +68,7 @@ class TradesScreen extends StatelessWidget {
                   },
                 ),
               );
+            }
             return _TradeTile(trade: state.trades![index]);
           },
         );
@@ -94,7 +98,7 @@ class _TradeTile extends StatelessWidget {
                 aspectRatio: 1.0,
                 child: Center(child: SvgPicture.network(currencyOne.photoUrl))
             ),
-            Icon(Icons.swap_horiz),
+            const Icon(Icons.swap_horiz),
             AspectRatio(
                 aspectRatio: 1.0,
                 child: Center(child: SvgPicture.network(currencyTwo.photoUrl))
@@ -109,7 +113,7 @@ class _TradeTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(18.0),
           ),
         trailing: IconButton(
-          icon: Icon(Icons.edit),
+          icon: const Icon(Icons.edit),
           onPressed: () async {
             final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => TradeScreen(trade: trade),

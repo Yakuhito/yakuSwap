@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:formz/formz.dart';
 
+// ignore: constant_identifier_names
 const ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
 
 class IdInput extends FormzInput<String, String> {
@@ -13,8 +14,9 @@ class IdInput extends FormzInput<String, String> {
     
     var r = Random.secure();
     const _chars = '0123456789ABCDEF';
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < 2; ++i) {
       secret += "-" + List.generate(8, (index) => _chars[r.nextInt(_chars.length)]).join();
+    }
 
     return secret;
   }
@@ -24,15 +26,20 @@ class IdInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(!value.startsWith("YAKU-"))
+    if(!value.startsWith("YAKU-")) {
       return "Not a valid id";
-    if(value.length < 22)
+    }
+    if(value.length < 22) {
       return "Id is too short";
-    if(value.length > 28)
+    }
+    if(value.length > 28) {
       return "Id is too long";
-    for(int i = 0;i < value.length; ++i)
-      if(!ALPHABET.contains(value[i]))
+    }
+    for(int i = 0;i < value.length; ++i) {
+      if(!ALPHABET.contains(value[i])) {
         return "Contains forbidden chars :(";
+    }
+      }
     return null;
   }
 }

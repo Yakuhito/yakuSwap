@@ -26,28 +26,28 @@ class Currency extends Equatable {
   });
 
   Currency.fromJSON(Map<String, dynamic> data) :
-    this.addressPrefix = data['address_prefix'],
-    this.name = data['name'],
-    this.photoUrl = data['photo_url'],
-    this.unitsPerCoin = data['units_per_coin'],
-    this.minFee = data['min_fee'],
-    this.defaultMaxBlockHeight = data['default_max_block_height'],
-    this.defaultMinConfirmationHeight = data['default_min_confirmation_height'],
-    this.host = data['host'],
-    this.port = data['port'],
-    this.sslDirectory = data['ssl_directory'];
+    addressPrefix = data['address_prefix'],
+    name = data['name'],
+    photoUrl = data['photo_url'],
+    unitsPerCoin = data['units_per_coin'],
+    minFee = data['min_fee'],
+    defaultMaxBlockHeight = data['default_max_block_height'],
+    defaultMinConfirmationHeight = data['default_min_confirmation_height'],
+    host = data['host'],
+    port = data['port'],
+    sslDirectory = data['ssl_directory'];
 
   Map<String, dynamic> toJSON() => {
-    'address_prefix': this.addressPrefix,
-    'name': this.name,
-    'photo_url': this.photoUrl,
-    'units_per_coin': this.unitsPerCoin,
-    'min_fee': this.minFee,
-    'default_max_block_height': this.defaultMaxBlockHeight,
-    'default_min_confirmation_height': this.defaultMinConfirmationHeight,
-    'host': this.host,
-    'port': this.port,
-    'ssl_directory': this.sslDirectory,
+    'address_prefix': addressPrefix,
+    'name': name,
+    'photo_url': photoUrl,
+    'units_per_coin': unitsPerCoin,
+    'min_fee': minFee,
+    'default_max_block_height': defaultMaxBlockHeight,
+    'default_min_confirmation_height': defaultMinConfirmationHeight,
+    'host': host,
+    'port': port,
+    'ssl_directory': sslDirectory,
   };
 
   @override

@@ -9,13 +9,16 @@ class PhotoURLInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(value.length < 8)
+    if(value.length < 8) {
       return "Photo URL is too short";
-    if(value.length > 512)
+    }
+    if(value.length > 512) {
       return "Photo URL is too long";
+    }
     bool valid = Uri.tryParse(value)?.hasAbsolutePath ?? false;
-    if(!valid)
+    if(!valid) {
       return "That's not a valid URL!";
+    }
     return null;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:formz/formz.dart';
 
+// ignore: constant_identifier_names
 const ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
 
 class SecretInput extends FormzInput<String, String> {
@@ -13,8 +14,9 @@ class SecretInput extends FormzInput<String, String> {
     
     var r = Random.secure();
     const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    for(int i = 0; i < 4; ++i)
+    for(int i = 0; i < 4; ++i) {
       secret += "-" + List.generate(8, (index) => _chars[r.nextInt(_chars.length)]).join();
+    }
 
     return secret;
   }
@@ -24,16 +26,21 @@ class SecretInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(value.length == 0) return null;
-    if(!value.startsWith("SECRET-"))
+    if(value.isEmpty) return null;
+    if(!value.startsWith("SECRET-")) {
       return "Invalid secret!";
-    if(value.length < 32)
+    }
+    if(value.length < 32) {
       return "Secret is too short";
-    if(value.length > 100)
+    }
+    if(value.length > 100) {
       return "Secret is too long";
-    for(int i = 0;i < value.length; ++i)
-      if(!ALPHABET.contains(value[i]))
+    }
+    for(int i = 0;i < value.length; ++i) {
+      if(!ALPHABET.contains(value[i])) {
         return "Contains forbidden chars :(";
+      }
+    }
     return null;
   }
 }

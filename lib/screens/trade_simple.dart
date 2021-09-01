@@ -31,7 +31,7 @@ class TradeSimpleScreen extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: SizedBox(
             width: MediaQuery.of(context).size.width / 3.0,
-            child: _Body(),
+            child: const _Body(),
           ),
         ),
       ),
@@ -62,15 +62,15 @@ class __BodyState extends State<_Body> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OutlinedButton.icon(
-                icon: Icon(Icons.arrow_circle_down_outlined),
-                label: Text("Import"),
+                icon: const Icon(Icons.arrow_circle_down_outlined),
+                label: const Text("Import"),
                 onPressed: () async {
                   final ClipboardData? clipboardData =
                       await Clipboard.getData("text/plain");
                   final String importStr = clipboardData?.text ?? "";
                   String message = "";
 
-                  if (importStr.length > 0) {
+                  if (importStr.isNotEmpty) {
                     message =
                         BlocProvider.of<TradeCubit>(context).import(importStr);
                   } else {
@@ -85,7 +85,7 @@ class __BodyState extends State<_Body> {
               ),
               const SizedBox(height: 16.0),
               DropdownButtonFormField<bool>(
-                  key: Key("tradeSimple_isBuyer_${isBuyer}"),
+                  key: Key("tradeSimple_isBuyer_$isBuyer"),
                   value: isBuyer,
                   onChanged: (newVal) => setState(() => isBuyer = newVal ?? true),
                   items: [
@@ -168,8 +168,8 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
     _totalAmountController =
         TextEditingController(text: widget.form.totalAmount.value);
     widget.onFormChanged(widget.form.copyWith(
-      maxBlockHeight: MaxBlockHeightInput.dirty(value: "192"),
-      minConfirmationHeight: MinConfirmationHeightInput.dirty(value: "32")
+      maxBlockHeight: const MaxBlockHeightInput.dirty(value: "192"),
+      minConfirmationHeight: const MinConfirmationHeightInput.dirty(value: "32")
     ));
     super.initState();
   }
@@ -199,9 +199,9 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
                   onChanged: (newVal) {
                      widget.onFormChanged(widget.form.copyWith(
                        addressPrefix: AddressPrefixInput.dirty(value: newVal!),
-                       toAddress: AddressInput.pure(),
-                       fromAddress: AddressInput.pure(),
-                       totalAmount: TransactionAmountInput.pure(),
+                       toAddress: const AddressInput.pure(),
+                       fromAddress: const AddressInput.pure(),
+                       totalAmount: const TransactionAmountInput.pure(),
                       ));
                       _fromAddressController.clear();
                       _toAddressController.clear();
@@ -225,10 +225,11 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
                 : addrInput1.error,
           ),
           onChanged: (newVal) {
-            if(widget.isSender)
+            if(widget.isSender) {
               widget.onFormChanged(widget.form.copyWith(fromAddress: AddressInput.dirty(value: newVal)));
-            else
+            } else {
               widget.onFormChanged(widget.form.copyWith(toAddress: AddressInput.dirty(value: newVal)));
+            }
           },
         ),
         TextFormField(
@@ -241,10 +242,11 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
                 : addrInput2.error,
           ),
           onChanged: (newVal) {
-            if(widget.isSender)
+            if(widget.isSender) {
               widget.onFormChanged(widget.form.copyWith(toAddress: AddressInput.dirty(value: newVal)));
-            else
+            } else {
               widget.onFormChanged(widget.form.copyWith(fromAddress: AddressInput.dirty(value: newVal)));
+            }
           },
         ),
         TextFormField(
@@ -293,12 +295,14 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
     amnt = amnt - units * currency.unitsPerCoin;
     bool amntModified = amnt == 0;
     if(amntModified) amnt = 1;
-    for(int pow = 1; pow * amnt * 10 < currency.unitsPerCoin; pow *= 10)
+    for(int pow = 1; pow * amnt * 10 < currency.unitsPerCoin; pow *= 10) {
       s += "0";
-    if(amntModified)
+    }
+    if(amntModified) {
       s += "0";
-    else
+    } else {
       s += "$amnt";
+    }
     s += "${currency.addressPrefix.toUpperCase()} (maximum fee: $feeAmnt mojo)";
     return s;
   }

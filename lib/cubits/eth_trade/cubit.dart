@@ -13,7 +13,7 @@ import 'package:yakuswap/models/inputs/transaction_amount.dart';
 part 'state.dart';
 
 class EthTradeCubit extends Cubit<EthTradeState> {
-  EthTradeCubit({EthTrade? trade}) : super(trade == null ? EthTradeState(form: EthTradeForm().autoGenerateFields()) :
+  EthTradeCubit({EthTrade? trade}) : super(trade == null ? EthTradeState(form: const EthTradeForm().autoGenerateFields()) :
     EthTradeState(form: EthTradeForm.fromTrade(trade: trade)));
 
   String import(String rawData) {
@@ -26,8 +26,9 @@ class EthTradeCubit extends Cubit<EthTradeState> {
 
       if(trade.tradeCurrency.fee < (trade.tradeCurrency.totalAmount / 10000).ceil() ||
         trade.tradeCurrency.maxBlockHeight != 192 ||
-        trade.tradeCurrency.minConfirmationHeight != 32)
+        trade.tradeCurrency.minConfirmationHeight != 32) {
         warning = "WARNING: Imported trade contains some non-default parameters that you don't see - proceed with extreme caution only if you know what you are doing.";
+      }
 
       final EthTradeState newState = EthTradeState(form: EthTradeForm.fromTrade(trade: trade), forceReload: true, warning: warning);
       emit(newState);
@@ -53,10 +54,11 @@ class EthTradeCubit extends Cubit<EthTradeState> {
   }
 
   void changeTradeCurrency(TradeCurrencyForm newVal) {
-    if(newVal.totalAmount.valid)
+    if(newVal.totalAmount.valid) {
       newVal = newVal.copyWith(
         fee: FeeInput.dirty(value: (int.parse(newVal.totalAmount.value) / 10000).ceil().toString()),
       );
+    }
     emit(state.copyWith(
       form: state.form.copyWith(
         tradeCurrency: newVal,

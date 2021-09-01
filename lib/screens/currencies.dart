@@ -17,26 +17,28 @@ class CurrenciesScreen extends StatelessWidget {
           oldState.currencies != newState.currencies ||
           oldState.connections != newState.connections,
       builder: (context, state) {
-        if (state.status == CurrenciesAndTradesStatus.loading)
-          return Center(
+        if (state.status == CurrenciesAndTradesStatus.loading) {
+          return const Center(
             child: CircularProgressIndicator(),
           );
-        if (state.status == CurrenciesAndTradesStatus.load_error)
-          return Center(
+        }
+        if (state.status == CurrenciesAndTradesStatus.loadError) {
+          return const Center(
             child: Text('Error while fetching currencies. Is the server running?'),
           );
+        }
         return ListView.builder(
           itemCount: state.currencies!.length + 1,
           itemBuilder: (context, index) {
-            if(index == state.currencies!.length)
+            if(index == state.currencies!.length) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                 child: OutlinedButton.icon(
-                  label: Text('Add new currency'),
-                  icon: Icon(Icons.add),
+                  label: const Text('Add new currency'),
+                  icon: const Icon(Icons.add),
                   onPressed: () async {
                     final dynamic result = await Navigator.of(context).push(MaterialPageRoute(
-                     builder: (context) => CurrencyScreen(),
+                     builder: (context) => const CurrencyScreen(),
                     ));
                     
                     if(result != null && result is Currency) {
@@ -46,6 +48,7 @@ class CurrenciesScreen extends StatelessWidget {
                   },
                 ),
               );
+            }
             return _CurrencyTile(
               currency: state.currencies![index],
               connection: state.connections?.firstWhere((element) => element.currency == state.currencies![index].addressPrefix),
@@ -69,9 +72,9 @@ class _CurrencyTile extends StatelessWidget {
         return Colors.white;
       case FullNodeConnectionStatus.connected:
         return Colors.green;
-      case FullNodeConnectionStatus.not_synced:
+      case FullNodeConnectionStatus.notSynced:
         return Colors.orange;
-      case FullNodeConnectionStatus.not_connected:
+      case FullNodeConnectionStatus.notConnected:
         return Colors.red;
     }
   }

@@ -1,5 +1,6 @@
 import 'package:formz/formz.dart';
 
+// ignore: constant_identifier_names
 const ALPHABET = "0123456789";
 
 class StepInput extends FormzInput<String, String> {
@@ -11,11 +12,14 @@ class StepInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(value.length >= 2)
+    if(value.length >= 2) {
       return "Uh...";
-    for(int i = 0;i < value.length; ++i)
-      if(!ALPHABET.contains(value[i]))
+    }
+    for(int i = 0;i < value.length; ++i) {
+      if(!ALPHABET.contains(value[i])) {
         return "That's not a number!";
+    }
+      }
     return null;
   }
 }

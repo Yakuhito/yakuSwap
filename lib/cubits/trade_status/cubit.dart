@@ -14,9 +14,9 @@ class TradeStatusCubit extends Cubit<TradeStatusState> {
 
   late final Timer _timer;
   TradeStatusCubit({required this.allInOneRepository, required this.tradeId}) : super(
-    TradeStatusState(tradeStatus: TradeStatus(address: null, message: "Fetching..."), tradeId: tradeId)
+    TradeStatusState(tradeStatus: const TradeStatus(address: null, message: "Fetching..."), tradeId: tradeId)
     ) {
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => update());
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => update());
   }
 
   Future<void> update() async {

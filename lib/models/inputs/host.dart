@@ -9,10 +9,12 @@ class HostInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(value.length < 5)
+    if(value.length < 5) {
       return "Uh...";
-    if(value.length > 32)
+    }
+    if(value.length > 32) {
       return "Hm...";
+    }
     return null;
   }
 }

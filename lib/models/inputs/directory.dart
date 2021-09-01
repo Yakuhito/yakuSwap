@@ -9,8 +9,9 @@ class DirectoryInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(value[0] == "/" || value.contains(":/") || value.contains(":\\")) // good enough to prevent most errors
+    if(value[0] == "/" || value.contains(":/") || value.contains(":\\")) {
       return null;
+    }
     return "Please use an absolute path";
   }
 }

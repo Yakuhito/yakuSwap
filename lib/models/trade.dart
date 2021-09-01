@@ -10,7 +10,7 @@ class Trade extends Equatable {
   final String? secret;
   final int step;
 
-  Trade({
+  const Trade({
     required this.id,
     required this.tradeCurrencyOne,
     required this.tradeCurrencyTwo,
@@ -21,30 +21,30 @@ class Trade extends Equatable {
   });
 
   Trade.fromJSON(Map<String, dynamic> data) :
-    this.id = data['id'],
-    this.tradeCurrencyOne = TradeCurrency.fromJSON(data['trade_currency_one']),
-    this.tradeCurrencyTwo = TradeCurrency.fromJSON(data['trade_currency_two']),
-    this.secretHash = data['secret_hash'],
-    this.isBuyer = data['is_buyer'],
-    this.secret = data['secret'],
-    this.step = data['step'];
+    id = data['id'],
+    tradeCurrencyOne = TradeCurrency.fromJSON(data['trade_currency_one']),
+    tradeCurrencyTwo = TradeCurrency.fromJSON(data['trade_currency_two']),
+    secretHash = data['secret_hash'],
+    isBuyer = data['is_buyer'],
+    secret = data['secret'],
+    step = data['step'];
 
   Map<String, dynamic> toJSON() => {
-    'id': this.id,
-    'trade_currency_one': this.tradeCurrencyOne.toJSON(),
-    'trade_currency_two': this.tradeCurrencyTwo.toJSON(),
-    'secret_hash': this.secretHash,
-    'is_buyer': this.isBuyer,
-    'secret': this.secret,
-    'step': this.step,
+    'id': id,
+    'trade_currency_one': tradeCurrencyOne.toJSON(),
+    'trade_currency_two': tradeCurrencyTwo.toJSON(),
+    'secret_hash': secretHash,
+    'is_buyer': isBuyer,
+    'secret': secret,
+    'step': step,
   };
 
   Map<String, dynamic> toSafeJSON() => {
-    'id': this.id,
-    'trade_currency_one': this.tradeCurrencyOne.toJSON(),
-    'trade_currency_two': this.tradeCurrencyTwo.toJSON(),
-    'secret_hash': this.secretHash,
-    'is_buyer': !this.isBuyer,
+    'id': id,
+    'trade_currency_one': tradeCurrencyOne.toJSON(),
+    'trade_currency_two': tradeCurrencyTwo.toJSON(),
+    'secret_hash': secretHash,
+    'is_buyer': !isBuyer,
     'secret': null,
     'step': 0,
   };

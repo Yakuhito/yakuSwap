@@ -49,7 +49,7 @@ class TradeStatusScreen extends StatelessWidget {
                               height: 150,
                               child: LoadingIndicator(
                                 indicatorType: Indicator.pacman,
-                                colors: [Colors.yellow, Colors.red, Colors.red],
+                                colors: const [Colors.yellow, Colors.red, Colors.red],
                                 backgroundColor: Colors.blue,
                               ),
                             ),
@@ -81,14 +81,14 @@ class TradeStatusScreen extends StatelessWidget {
                                           ),
                                           const SizedBox(height: 8.0),
                                           IconButton(
-                                            icon: Icon(Icons.copy),
+                                            icon: const Icon(Icons.copy),
                                             onPressed: () async {
                                               await Clipboard.setData(ClipboardData(
                                                   text:
                                                       state.tradeStatus.address!));
                                               ScaffoldMessenger.of(context)
                                                 ..hideCurrentSnackBar()
-                                                ..showSnackBar(SnackBar(
+                                                ..showSnackBar(const SnackBar(
                                                   content: Text(
                                                       "Address copied to clipboard!"),
                                                 ));

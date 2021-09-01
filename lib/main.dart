@@ -10,10 +10,12 @@ import 'package:yakuswap/screens/eth_trades.dart';
 import 'package:yakuswap/screens/trades.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.amber,
           ),
-          home: _TabController(),
+          home: const _TabController(),
         ),
       ),
     );
@@ -60,9 +62,9 @@ class _TabController extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('yakuSwap'),
+          title: const Text('yakuSwap'),
           centerTitle: true,
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(text: 'Currencies'),
               Tab(text: 'Fork Trades'),
@@ -71,7 +73,7 @@ class _TabController extends StatelessWidget {
           ),
           actions: [
             Builder(builder: (context) => IconButton(
-              icon: Icon(Icons.refresh),
+              icon: const Icon(Icons.refresh),
               onPressed: () {
                  BlocProvider.of<CurrenciesAndTradesCubit>(context).refresh();
                  BlocProvider.of<EthCubit>(context).refresh();
@@ -88,7 +90,7 @@ class _TabController extends StatelessWidget {
           child: Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width / 3,
-              child: TabBarView(
+              child: const TabBarView(
                 children: [
                   CurrenciesScreen(),
                   TradesScreen(),

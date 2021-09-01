@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum FullNodeConnectionStatus {not_connected, not_synced, connected}
+enum FullNodeConnectionStatus {notConnected, notSynced, connected}
 
 class FullNodeConnection extends Equatable {
   final String currency;
@@ -12,9 +12,9 @@ class FullNodeConnection extends Equatable {
   });
 
   FullNodeConnection.fromJSON(Map<String, dynamic> data) :
-    this.currency = data['currency'],
-    this.status = data['status'] == 'connected' ? FullNodeConnectionStatus.connected :
-      ( data['status'] == 'not_connected' ? FullNodeConnectionStatus.not_connected : FullNodeConnectionStatus.not_synced);
+    currency = data['currency'],
+    status = data['status'] == 'connected' ? FullNodeConnectionStatus.connected :
+      ( data['status'] == 'not_connected' ? FullNodeConnectionStatus.notConnected : FullNodeConnectionStatus.notSynced);
 
   @override
   List<Object?> get props => [currency, status];

@@ -11,7 +11,7 @@ import 'package:yakuswap/models/trade.dart';
 part 'state.dart';
 
 class TradeCubit extends Cubit<TradeState> {
-  TradeCubit({Trade? trade}) : super(trade == null ? TradeState(form: TradeForm().autoGenerateFields()) :
+  TradeCubit({Trade? trade}) : super(trade == null ? TradeState(form: const TradeForm().autoGenerateFields()) :
     TradeState(form: TradeForm.fromTrade(trade: trade)));
 
   String import(String rawData) {

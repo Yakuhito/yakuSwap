@@ -1,6 +1,7 @@
 import 'package:formz/formz.dart';
 
-const ALPHABET = "abcdefghijklmnopqrstuvwxyz";
+// ignore: constant_identifier_names
+const String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
 class AddressPrefixInput extends FormzInput<String, String> {
   static const String labelText = "Address Prefix";
@@ -11,9 +12,11 @@ class AddressPrefixInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    for(int i = 0;i < value.length; ++i)
-      if(!ALPHABET.contains(value[i]))
+    for(int i = 0;i < value.length; ++i) {
+      if(!ALPHABET.contains(value[i])) {
         return "Address prefix can only contain lowercase chars!";
+    }
+      }
     return null;
   }
 }

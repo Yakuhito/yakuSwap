@@ -1,6 +1,6 @@
 part of 'cubit.dart';
 
-enum EthStatus {loading, loaded, load_error}
+enum EthStatus {loading, loaded, loadError}
 
 class EthState extends Equatable {
   final EthStatus status;
@@ -17,7 +17,7 @@ class EthState extends Equatable {
 
   const EthState.initial() : this._();
   const EthState.loading() : this._();
-  const EthState.error() : this._(status:EthStatus.load_error);
+  const EthState.error() : this._(status:EthStatus.loadError);
   const EthState.loaded(bool walletConnected, {String? address, List<EthTrade>? trades}) : this._(
     status: EthStatus.loaded,
     walletConnected: walletConnected,

@@ -1,6 +1,6 @@
 part of 'cubit.dart';
 
-enum CurrenciesAndTradesStatus {loading, loaded, load_error}
+enum CurrenciesAndTradesStatus {loading, loaded, loadError}
 
 class CurrenciesAndTradesState extends Equatable {
   final CurrenciesAndTradesStatus status;
@@ -17,7 +17,7 @@ class CurrenciesAndTradesState extends Equatable {
 
   const CurrenciesAndTradesState.initial() : this._();
   const CurrenciesAndTradesState.loading() : this._();
-  const CurrenciesAndTradesState.error() : this._(status: CurrenciesAndTradesStatus.load_error);
+  const CurrenciesAndTradesState.error() : this._(status: CurrenciesAndTradesStatus.loadError);
   const CurrenciesAndTradesState.loaded(List<Currency> currencies, List<Trade> trades, {List<FullNodeConnection>? connections}) : this._(
     status: CurrenciesAndTradesStatus.loaded,
     currencies: currencies,

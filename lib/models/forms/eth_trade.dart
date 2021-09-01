@@ -42,27 +42,27 @@ class EthTradeForm with FormzMixin {
       id:  IdInput.dirty(value: id),
       tradeCurrency: TradeCurrencyForm(
         id: IdInput.dirty(value: "$id-1"),
-        addressPrefix: AddressPrefixInput.dirty(value: "xch"),
-        maxBlockHeight: MaxBlockHeightInput.dirty(value: "192"),
-        minConfirmationHeight: MinConfirmationHeightInput.dirty(value: "32"),
+        addressPrefix: const AddressPrefixInput.dirty(value: "xch"),
+        maxBlockHeight: const MaxBlockHeightInput.dirty(value: "192"),
+        minConfirmationHeight: const MinConfirmationHeightInput.dirty(value: "32"),
       ),
       secretHash: HashInput.forSecret(secret: secret),
       secret: SecretInput.dirty(value: secret),
-      step: StepInput.dirty(value: "0"),
+      step: const StepInput.dirty(value: "0"),
       isBuyer: true,
     );
   }
 
   EthTradeForm.fromTrade({required EthTrade trade}) :
-    this.id = IdInput.dirty(value: trade.id),
-    this.tradeCurrency = TradeCurrencyForm.fromTradeCurrency(tradeCurrency: trade.tradeCurrency),
-    this.ethFromAddress = EthAddressInput.dirty(value: trade.ethFromAddress),
-    this.ethToAddress = EthAddressInput.dirty(value: trade.ethFromAddress),
-    this.ethTotalWei = TransactionAmountInput.dirty(value: trade.totalWei.toString()),
-    this.secretHash = HashInput.dirty(value: trade.secretHash),
-    this.secret = SecretInput.dirty(value: trade.secret ?? ""),
-    this.step = StepInput.dirty(value: "${trade.step}"),
-    this.isBuyer = trade.isBuyer;
+    id = IdInput.dirty(value: trade.id),
+    tradeCurrency = TradeCurrencyForm.fromTradeCurrency(tradeCurrency: trade.tradeCurrency),
+    ethFromAddress = EthAddressInput.dirty(value: trade.ethFromAddress),
+    ethToAddress = EthAddressInput.dirty(value: trade.ethFromAddress),
+    ethTotalWei = TransactionAmountInput.dirty(value: trade.totalWei.toString()),
+    secretHash = HashInput.dirty(value: trade.secretHash),
+    secret = SecretInput.dirty(value: trade.secret ?? ""),
+    step = StepInput.dirty(value: "${trade.step}"),
+    isBuyer = trade.isBuyer;
 
   EthTradeForm copyWith({
     IdInput? id,
@@ -93,7 +93,7 @@ class EthTradeForm with FormzMixin {
     ethToAddress: ethToAddress.value,
     totalWei: int.parse(ethTotalWei.value),
     secretHash: secretHash.value,
-    secret: secret.value.length == 0 ? null : secret.value,
+    secret: secret.value.isEmpty ? null : secret.value,
     step: int.parse(step.value),
     isBuyer: isBuyer,
   ) : null;

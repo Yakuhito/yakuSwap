@@ -22,24 +22,24 @@ class TradeCurrency extends Equatable {
   });
 
   TradeCurrency.fromJSON(Map<String, dynamic> data) :
-    this.id = data['id'],
-    this.addressPrefix = data['address_prefix'],
-    this.fee = data['fee'],
-    this.totalAmount = data['total_amount'],
-    this.maxBlockHeight = data['max_block_height'],
-    this.minConfirmationHeight = data['min_confirmation_height'],
-    this.fromAddress = data['from_address'],
-    this.toAddress = data['to_address'];
+    id = data['id'],
+    addressPrefix = data['address_prefix'],
+    fee = data['fee'],
+    totalAmount = data['total_amount'],
+    maxBlockHeight = data['max_block_height'],
+    minConfirmationHeight = data['min_confirmation_height'],
+    fromAddress = data['from_address'],
+    toAddress = data['to_address'];
 
   Map<String, dynamic> toJSON() => {
-    'id': this.id,
-    'address_prefix': this.addressPrefix,
-    'fee': this.fee,
-    'total_amount': this.totalAmount,
-    'max_block_height': this.maxBlockHeight,
-    'min_confirmation_height': this.minConfirmationHeight,
-    'from_address': this.fromAddress,
-    'to_address': this.toAddress
+    'id': id,
+    'address_prefix': addressPrefix,
+    'fee': fee,
+    'total_amount': totalAmount,
+    'max_block_height': maxBlockHeight,
+    'min_confirmation_height': minConfirmationHeight,
+    'from_address': fromAddress,
+    'to_address': toAddress
   };
 
   @override

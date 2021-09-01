@@ -1,5 +1,6 @@
 import 'package:formz/formz.dart';
 
+// ignore: constant_identifier_names
 const ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 class NameInput extends FormzInput<String, String> {
@@ -11,13 +12,17 @@ class NameInput extends FormzInput<String, String> {
 
   @override
   String? validator(String value) {
-    if(value.length < 3)
+    if(value.length < 3) {
       return "Name is too short";
-    if(value.length > 16)
+    }
+    if(value.length > 16) {
       return "Name is too long";
-    for(int i = 0;i < value.length; ++i)
-      if(!ALPHABET.contains(value[i]))
+    }
+    for(int i = 0;i < value.length; ++i) {
+      if(!ALPHABET.contains(value[i])) {
         return "Contains forbidden chars :(";
+    }
+      }
     return null;
   }
 }

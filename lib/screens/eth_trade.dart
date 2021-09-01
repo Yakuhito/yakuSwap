@@ -31,8 +31,9 @@ class _Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EthTradeCubit, EthTradeState>(
       builder: (context, state) {
-        if(state.form.id.pure)
+        if(state.form.id.pure) {
           return Container();
+        }
         return Scaffold(
           appBar: AppBar(
             title: Text(state.form.id.value),
@@ -131,15 +132,15 @@ class __BodyState extends State<_Body> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OutlinedButton.icon(
-                icon: Icon(Icons.arrow_circle_up_outlined),
-                label: Text("Export"),
+                icon: const Icon(Icons.arrow_circle_up_outlined),
+                label: const Text("Export"),
                 onPressed: () async {
                   final String exportString = BlocProvider.of<EthTradeCubit>(context).export();
                   await Clipboard.setData(ClipboardData(text: exportString));
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(
-                       SnackBar(content: Text(
+                       const SnackBar(content: Text(
                         "Trade data copied to clipboard - the export contains your SECRET, so DO NOT SHARE IT WITH ANYBODY!")
                         ),
                     );
@@ -147,14 +148,14 @@ class __BodyState extends State<_Body> {
               ),
               const SizedBox(height: 8.0),
               OutlinedButton.icon(
-                icon: Icon(Icons.arrow_circle_down_outlined),
-                label: Text("Import"),
+                icon: const Icon(Icons.arrow_circle_down_outlined),
+                label: const Text("Import"),
                 onPressed: () async {
                   final ClipboardData? clipboardData = await Clipboard.getData("text/plain");
                   final String importStr = clipboardData?.text ?? "";
                   String message = "";
 
-                  if (importStr.length > 0) {
+                  if (importStr.isNotEmpty) {
                     message = BlocProvider.of<EthTradeCubit>(context).import(importStr);
                   } else {
                     message = "Could not read data from your clipboard";
@@ -168,14 +169,14 @@ class __BodyState extends State<_Body> {
               ),
               const SizedBox(height: 8.0),
               OutlinedButton.icon(
-                icon: Icon(Icons.share),
-                label: Text("Share"),
+                icon: const Icon(Icons.share),
+                label: const Text("Share"),
                 onPressed: () async {
                   final String exportString = BlocProvider.of<EthTradeCubit>(context).safeExport();
                   await Clipboard.setData(ClipboardData(text: exportString));
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
-                    ..showSnackBar(SnackBar(content: Text(
+                    ..showSnackBar(const SnackBar(content: Text(
                         "Data copied to clipboard - you can share it with your trade partner")
                       ),
                     );
@@ -212,14 +213,15 @@ class __BodyState extends State<_Body> {
                   errorText: xchAddress1.pure ? null : xchAddress1.error,
                 ),
                 onChanged: (newVal) {
-                  if(widget.form.isBuyer)
+                  if(widget.form.isBuyer) {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
                       fromAddress: AddressInput.dirty(value: newVal),
                     ));
-                  else
+                  } else {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
                       toAddress: AddressInput.dirty(value: newVal),
                     ));
+                  }
                 },
               ),
               const SizedBox(height: 16.0),
@@ -231,14 +233,15 @@ class __BodyState extends State<_Body> {
                   errorText: xchAddress2.pure ? null : xchAddress2.error,
                 ),
                 onChanged: (newVal) {
-                  if(widget.form.isBuyer)
+                  if(widget.form.isBuyer) {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
                       toAddress: AddressInput.dirty(value: newVal),
                     ));
-                  else
+                  } else {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
                       fromAddress: AddressInput.dirty(value: newVal),
                     ));
+                  }
                 },
               ),
               const SizedBox(height: 16.0),
@@ -265,10 +268,11 @@ class __BodyState extends State<_Body> {
                   errorText: ethAddress1.pure ? null : ethAddress1.error,
                 ),
                 onChanged: (newVal) {
-                  if(widget.form.isBuyer)
+                  if(widget.form.isBuyer) {
                     BlocProvider.of<EthTradeCubit>(context).changeEthToAddress(newVal);
-                  else
+                  } else {
                     BlocProvider.of<EthTradeCubit>(context).changeEthFromAddress(newVal);
+                  }
                 },
               ),
               const SizedBox(height: 16.0),
@@ -280,10 +284,11 @@ class __BodyState extends State<_Body> {
                   errorText: ethAddress2.pure ? null : ethAddress2.error,
                 ),
                 onChanged: (newVal) {
-                  if(widget.form.isBuyer)
+                  if(widget.form.isBuyer) {
                     BlocProvider.of<EthTradeCubit>(context).changeEthFromAddress(newVal);
-                  else
+                  } else {
                     BlocProvider.of<EthTradeCubit>(context).changeEthToAddress(newVal);
+                  }
                 },
               ),
               const SizedBox(height: 16.0),
@@ -315,15 +320,15 @@ class __BodyState extends State<_Body> {
                   final dynamic confirm = await showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text("Are you sure?"),
-                      content: Text("Do you really want to delete this trade?"),
+                      title: const Text("Are you sure?"),
+                      content: const Text("Do you really want to delete this trade?"),
                       actions: [
                         TextButton(
-                          child: Text("Cancel"),
+                          child: const Text("Cancel"),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         TextButton(
-                          child: Text("DELETE"),
+                          child: const Text("DELETE"),
                           style: TextButton.styleFrom(primary: Colors.red),
                           onPressed: () => Navigator.of(context).pop(true)
                         ),
@@ -349,12 +354,14 @@ class __BodyState extends State<_Body> {
     amnt = amnt - units * unitsPerCoin;
     bool amntModified = amnt == 0;
     if(amntModified) amnt = 1;
-    for(int pow = 1; pow * 10 * amnt < unitsPerCoin; pow *= 10)
+    for(int pow = 1; pow * 10 * amnt < unitsPerCoin; pow *= 10) {
       s += "0";
-    if(amntModified)
+    }
+    if(amntModified) {
       s += "0 $symbol ";
-    else
+    } else {
       s += "$amnt $symbol ";
+    }
     if(showFee) {
       double feeAmnt = ((int.parse(amount) * 75 / 10000).ceil() + 2) / unitsPerCoin;
       s += "(max fee: $feeAmnt)";

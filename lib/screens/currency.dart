@@ -101,8 +101,8 @@ class __BodyState extends State<_Body> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 OutlinedButton.icon(
-                  icon: Icon(Icons.arrow_circle_up_outlined),
-                  label: Text("Export"),
+                  icon: const Icon(Icons.arrow_circle_up_outlined),
+                  label: const Text("Export"),
                   onPressed: () async {
                     final String exportString =
                         BlocProvider.of<CurrencyCubit>(context).export();
@@ -110,22 +110,22 @@ class __BodyState extends State<_Body> {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                             content: Text("Currency data copied to clipboard")),
                       );
                   },
                 ),
                 const SizedBox(height: 8.0),
                 OutlinedButton.icon(
-                  icon: Icon(Icons.arrow_circle_down_outlined),
-                  label: Text("Import"),
+                  icon: const Icon(Icons.arrow_circle_down_outlined),
+                  label: const Text("Import"),
                   onPressed: () async {
                     final ClipboardData? clipboardData =
                         await Clipboard.getData("text/plain");
                     final String importStr = clipboardData?.text ?? "";
                     String message = "";
 
-                    if (importStr.length > 0) {
+                    if (importStr.isNotEmpty) {
                       message = BlocProvider.of<CurrencyCubit>(context)
                           .import(importStr);
                     } else {
@@ -347,17 +347,17 @@ class __BodyState extends State<_Body> {
                                 final dynamic confirm = await showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                    title: Text("Are you sure?"),
-                                    content: Text(
+                                    title: const Text("Are you sure?"),
+                                    content: const Text(
                                         "Do you really want to delete this currency?"),
                                     actions: [
                                       TextButton(
-                                        child: Text("Cancel"),
+                                        child: const Text("Cancel"),
                                         onPressed: () =>
                                             Navigator.of(context).pop(),
                                       ),
                                       TextButton(
-                                        child: Text("DELETE"),
+                                        child: const Text("DELETE"),
                                         style: TextButton.styleFrom(
                                             primary: Colors.red),
                                         onPressed: () =>

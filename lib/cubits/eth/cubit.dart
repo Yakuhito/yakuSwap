@@ -10,19 +10,20 @@ class EthCubit extends Cubit<EthState> {
   final AllInOneRepository allInOneRepository;
   final EthRepository ethRepository;
 
-  EthCubit({required this.allInOneRepository, required this.ethRepository}) : super(EthState.initial());
+  EthCubit({required this.allInOneRepository, required this.ethRepository}) : super(const EthState.initial());
 
   Future<void> initialize() => refresh();
 
   Future<void> refresh({bool connectWallet = false}) async {
-    emit(EthState.loading());
+    emit(const EthState.loading());
     try {
-      if(connectWallet)
+      if(connectWallet) {
         await ethRepository.connectWallet();
+      }
 
       String? address = ethRepository.getAddress();
       if(address == null) {
-        emit(EthState.loaded(false));
+        emit(const EthState.loaded(false));
       } else {
         emit(EthState.loaded(true, address: address));
         ethRepository.registerListener();
@@ -32,14 +33,11 @@ class EthCubit extends Cubit<EthState> {
         emit(EthState.loaded(true, address: address, trades: trades));
       }
     } catch(_) {
-      emit(EthState.error());
+      emit(const EthState.error());
     }
   }
 
   Future<void> updateTrade({required EthTrade trade}) async {
-    print("Update trade!");
-    print(trade);
-    print(trade.toJSON());
-    print("---");
+    
   }
 }
