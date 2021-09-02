@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:yakuswap/models/forms/trade.dart';
 import 'package:yakuswap/models/forms/trade_currency.dart';
+import 'package:yakuswap/models/inputs/hash.dart';
 import 'package:yakuswap/models/inputs/step.dart';
 import 'package:yakuswap/models/trade.dart';
 
@@ -60,6 +61,7 @@ class TradeCubit extends Cubit<TradeState> {
       form: state.form.copyWith(
         tradeCurrencyOne: newVal,
       ),
+      forceReload: false,
     ));
   }
 
@@ -68,6 +70,7 @@ class TradeCubit extends Cubit<TradeState> {
       form: state.form.copyWith(
         tradeCurrencyTwo: newVal,
       ),
+      forceReload: false,
     ));
   }
 
@@ -76,6 +79,7 @@ class TradeCubit extends Cubit<TradeState> {
       form: state.form.copyWith(
         isBuyer: !state.form.isBuyer,
       ),
+      forceReload: false,
     ));
   }
 
@@ -84,6 +88,16 @@ class TradeCubit extends Cubit<TradeState> {
       form: state.form.copyWith(
         step: StepInput.dirty(value: newVal),
       ),
+      forceReload: false,
+    ));
+  }
+
+  void changeSecretHash(String newVal) {
+    emit(state.copyWith(
+      form: state.form.copyWith(
+        secretHash: HashInput.dirty(value: newVal),
+      ),
+      forceReload: false,
     ));
   }
 }

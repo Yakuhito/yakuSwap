@@ -8,6 +8,7 @@ import 'package:yakuswap/models/forms/eth_trade.dart';
 import 'package:yakuswap/models/forms/trade_currency.dart';
 import 'package:yakuswap/models/inputs/eth_adress.dart';
 import 'package:yakuswap/models/inputs/fee.dart';
+import 'package:yakuswap/models/inputs/hash.dart';
 import 'package:yakuswap/models/inputs/transaction_amount.dart';
 
 part 'state.dart';
@@ -64,6 +65,7 @@ class EthTradeCubit extends Cubit<EthTradeState> {
       form: state.form.copyWith(
         tradeCurrency: newVal,
       ),
+      forceReload: false,
     ));
   }
 
@@ -72,6 +74,7 @@ class EthTradeCubit extends Cubit<EthTradeState> {
       form: state.form.copyWith(
         isBuyer: newVal,
       ),
+      forceReload: false,
     ));
   }
 
@@ -80,6 +83,7 @@ class EthTradeCubit extends Cubit<EthTradeState> {
       form: state.form.copyWith(
         ethFromAddress: EthAddressInput.dirty(value: newVal),
       ),
+      forceReload: false,
     ));
   }
 
@@ -88,14 +92,25 @@ class EthTradeCubit extends Cubit<EthTradeState> {
       form: state.form.copyWith(
         ethToAddress: EthAddressInput.dirty(value: newVal),
       ),
+      forceReload: false,
     ));
   }
 
   void changeEthTotalWei(String newVal) {
     emit(state.copyWith(
       form: state.form.copyWith(
-        ethTotalWei: TransactionAmountInput.dirty(value: newVal),
+        ethTotalGwei: TransactionAmountInput.dirty(value: newVal),
       ),
+      forceReload: false,
+    ));
+  }
+
+  void changeSecretHash(String newVal) {
+    emit(state.copyWith(
+      form: state.form.copyWith(
+        secretHash: HashInput.dirty(value: newVal),
+      ),
+      forceReload: false,
     ));
   }
 }

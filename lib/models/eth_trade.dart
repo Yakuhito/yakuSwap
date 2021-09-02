@@ -6,7 +6,7 @@ class EthTrade extends Equatable {
   final TradeCurrency tradeCurrency;
   final String ethFromAddress;
   final String ethToAddress;
-  final int totalWei;
+  final int totalGwei;
   final String secretHash;
   final bool isBuyer;
   final String? secret;
@@ -17,7 +17,7 @@ class EthTrade extends Equatable {
     required this.tradeCurrency,
     required this.ethFromAddress,
     required this.ethToAddress,
-    required this.totalWei,
+    required this.totalGwei,
     required this.secretHash,
     required this.isBuyer,
     required this.secret,
@@ -29,7 +29,7 @@ class EthTrade extends Equatable {
     tradeCurrency = TradeCurrency.fromJSON(data['trade_currency']),
     ethFromAddress = data['eth_from_address'],
     ethToAddress = data['eth_to_address'],
-    totalWei = data['total_wei'],
+    totalGwei = data['total_gwei'],
     secretHash = data['secret_hash'],
     isBuyer = data['is_buyer'],
     secret = data['secret'],
@@ -40,7 +40,7 @@ class EthTrade extends Equatable {
     'trade_currency': tradeCurrency.toJSON(),
     'eth_from_address': ethFromAddress,
     'eth_to_address': ethToAddress,
-    'total_wei': totalWei,
+    'total_gwei': totalGwei,
     'secret_hash': secretHash,
     'is_buyer': isBuyer,
     'secret': secret,
@@ -52,7 +52,7 @@ class EthTrade extends Equatable {
     'trade_currency': tradeCurrency.toJSON(),
     'eth_from_address': ethFromAddress,
     'eth_to_address': ethToAddress,
-    'total_wei': totalWei,
+    'total_gwei': totalGwei,
     'secret_hash': secretHash,
     'is_buyer': !isBuyer,
     'secret': null,
@@ -60,5 +60,5 @@ class EthTrade extends Equatable {
   };
 
   @override
-  List<Object?> get props => [id, tradeCurrency, ethFromAddress, ethToAddress, totalWei, secretHash, isBuyer, secret, step];
+  List<Object?> get props => [id, tradeCurrency, ethFromAddress, ethToAddress, totalGwei, secretHash, isBuyer, secret, step];
 }

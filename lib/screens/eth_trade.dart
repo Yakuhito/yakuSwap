@@ -6,6 +6,7 @@ import 'package:yakuswap/models/eth_trade.dart';
 import 'package:yakuswap/models/forms/eth_trade.dart';
 import 'package:yakuswap/models/inputs/address.dart';
 import 'package:yakuswap/models/inputs/eth_adress.dart';
+import 'package:yakuswap/models/inputs/hash.dart';
 import 'package:yakuswap/models/inputs/transaction_amount.dart';
 
 class EthTradeScreen extends StatelessWidget {
@@ -82,11 +83,13 @@ class __BodyState extends State<_Body> {
   late final TextEditingController _ethYourAddressController;
   late final TextEditingController _ethPartnerAddressController;
   late final TextEditingController _ethTotalAmountController;
+  late final TextEditingController _secretHashController;
 
   @override
   void initState() {
     _xchTotalAmountController = TextEditingController(text: widget.form.tradeCurrency.totalAmount.value);
-    _ethTotalAmountController = TextEditingController(text: widget.form.ethTotalWei.value);
+    _ethTotalAmountController = TextEditingController(text: widget.form.ethTotalGwei.value);
+    _secretHashController = TextEditingController(text: widget.form.secretHash.value);
     if(widget.form.isBuyer) {
       _ethYourAddressController = TextEditingController(text: widget.form.ethToAddress.value);
       _ethPartnerAddressController = TextEditingController(text: widget.form.ethFromAddress.value);
@@ -112,7 +115,8 @@ class __BodyState extends State<_Body> {
       listenWhen: (oldState, newState) => newState.forceReload == true,
       listener: (context, state) {
         _xchTotalAmountController.text = state.form.tradeCurrency.totalAmount.value;
-        _ethTotalAmountController.text = state.form.ethTotalWei.value;
+        _ethTotalAmountController.text = state.form.ethTotalGwei.value;
+        _secretHashController.text = state.form.secretHash.value;
         if(state.form.isBuyer) {
           _ethYourAddressController.text = state.form.ethToAddress.value;
           _ethPartnerAddressController.text = state.form.ethFromAddress.value;
@@ -298,15 +302,28 @@ class __BodyState extends State<_Body> {
               TextFormField(
                 controller: _ethTotalAmountController,
                 decoration: InputDecoration(
-                  labelText: "ETH Amount (in wei)",
+                  labelText: "ETH Amount (in gwei)",
                   hintText: TransactionAmountInput.hintText,
-                  errorText: widget.form.ethTotalWei.pure ? null : widget.form.ethTotalWei.error,
+                  errorText: widget.form.ethTotalGwei.pure ? null : widget.form.ethTotalGwei.error,
                   helperText: _getAmountHelper(
-                    widget.form.ethTotalWei.value, "ETH", 1000000000000000000, showFee: false
+                    widget.form.ethTotalGwei.value, "ETH", 1000000000, showFee: false
                   ),
                 ),
                 onChanged: (newVal) => BlocProvider.of<EthTradeCubit>(context).changeEthTotalWei(newVal),
               ),
+              widget.form.isBuyer ? const SizedBox.shrink() :
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: TextFormField(
+                  controller: _secretHashController,
+                  decoration: InputDecoration(
+                    labelText: "Secret hash (from partner)",
+                    hintText: HashInput.hintText,
+                    errorText: widget.form.secretHash.pure ? null : widget.form.secretHash.error,
+                  ),
+                  onChanged: (newVal) => BlocProvider.of<EthTradeCubit>(context).changeSecretHash(newVal),
+                ),
+              ), 
               const SizedBox(height: 16.0),
               widget.warning != null ? Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
@@ -379,5 +396,17 @@ class __BodyState extends State<_Body> {
       s += "(does not include transaction fees)";
     }
     return s;
+  }
+
+  @override
+  void dispose() {
+    _xchYourAddressController.dispose();
+    _xchPartnerAddressController.dispose();
+    _xchTotalAmountController.dispose();
+    _ethYourAddressController.dispose();
+    _ethPartnerAddressController.dispose(); 
+    _ethTotalAmountController.dispose(); 
+    _secretHashController.dispose();
+    super.dispose();
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:yakuswap/cubits/eth/cubit.dart';
 import 'package:yakuswap/cubits/trade_status/cubit.dart';
+import 'package:yakuswap/models/command.dart';
 import 'package:yakuswap/repositories/allinone.dart';
 
 class TradeStatusScreen extends StatelessWidget {
@@ -25,7 +27,15 @@ class TradeStatusScreen extends StatelessWidget {
           centerTitle: true,
         ),
         body: Builder(
-          builder: (context) => BlocBuilder<TradeStatusCubit, TradeStatusState>(
+          builder: (context) => BlocConsumer<TradeStatusCubit, TradeStatusState>(
+            listenWhen: (oldState, newState) => newState.tradeStatus.command != oldState.tradeStatus.command && newState.tradeStatus.command?.type == CommandType.waitForSwap,
+            listener: (context, state) {
+              BlocProvider.of<EthCubit>(context).handleCommand(
+                tradeId: tradeId,
+                command: state.tradeStatus.command!,
+                showMessage: (message) => ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(SnackBar(content: Text(message))),
+              );
+            },
             builder: (context, state) {
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -98,6 +108,7 @@ class TradeStatusScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
+                                _getButtonForCommand(context, state.tradeId, state.tradeStatus.command),
                               ],
                             ),
                           ),
@@ -112,5 +123,29 @@ class TradeStatusScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _getButtonForCommand(BuildContext context, String tradeId, Command? command) {
+    if(command == null) return const SizedBox.shrink();
+
+    switch(command.type) {
+      case CommandType.createSwap:
+        return Padding(
+          padding: const EdgeInsets.only(top: 32.0),
+          child: ElevatedButton(
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("Create swap", style: TextStyle(color: Colors.white)),
+            ),
+            onPressed: () => BlocProvider.of<EthCubit>(context).handleCommand(
+              tradeId: tradeId,
+              command: command,
+              showMessage: (message) => ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(SnackBar(content: Text(message))),
+            ),
+          ),
+        );
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }

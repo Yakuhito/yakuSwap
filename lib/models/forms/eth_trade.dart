@@ -16,7 +16,7 @@ class EthTradeForm with FormzMixin {
   final TradeCurrencyForm tradeCurrency;
   final EthAddressInput ethFromAddress;
   final EthAddressInput ethToAddress;
-  final TransactionAmountInput ethTotalWei;
+  final TransactionAmountInput ethTotalGwei;
   final HashInput secretHash;
   final SecretInput secret;
   final StepInput step;
@@ -27,7 +27,7 @@ class EthTradeForm with FormzMixin {
     this.tradeCurrency = const TradeCurrencyForm(),
     this.ethFromAddress = const EthAddressInput.pure(),
     this.ethToAddress = const EthAddressInput.pure(),
-    this.ethTotalWei = const TransactionAmountInput.pure(),
+    this.ethTotalGwei = const TransactionAmountInput.pure(),
     this.secretHash = const HashInput.pure(),
     this.secret = const SecretInput.pure(),
     this.step = const StepInput.pure(),
@@ -57,8 +57,8 @@ class EthTradeForm with FormzMixin {
     id = IdInput.dirty(value: trade.id),
     tradeCurrency = TradeCurrencyForm.fromTradeCurrency(tradeCurrency: trade.tradeCurrency),
     ethFromAddress = EthAddressInput.dirty(value: trade.ethFromAddress),
-    ethToAddress = EthAddressInput.dirty(value: trade.ethFromAddress),
-    ethTotalWei = TransactionAmountInput.dirty(value: trade.totalWei.toString()),
+    ethToAddress = EthAddressInput.dirty(value: trade.ethToAddress),
+    ethTotalGwei = TransactionAmountInput.dirty(value: trade.totalGwei.toString()),
     secretHash = HashInput.dirty(value: trade.secretHash),
     secret = SecretInput.dirty(value: trade.secret ?? ""),
     step = StepInput.dirty(value: "${trade.step}"),
@@ -69,7 +69,7 @@ class EthTradeForm with FormzMixin {
     TradeCurrencyForm? tradeCurrency,
     EthAddressInput? ethFromAddress,
     EthAddressInput? ethToAddress,
-    TransactionAmountInput? ethTotalWei,
+    TransactionAmountInput? ethTotalGwei,
     HashInput? secretHash,
     SecretInput? secret,
     StepInput? step,
@@ -79,7 +79,7 @@ class EthTradeForm with FormzMixin {
     tradeCurrency: tradeCurrency ?? this.tradeCurrency,
     ethFromAddress: ethFromAddress ?? this.ethFromAddress,
     ethToAddress: ethToAddress ?? this.ethToAddress,
-    ethTotalWei: ethTotalWei ?? this.ethTotalWei,
+    ethTotalGwei: ethTotalGwei ?? this.ethTotalGwei,
     secretHash: secretHash ?? this.secretHash,
     secret: secret ?? this.secret,
     step: step ?? this.step,
@@ -91,7 +91,7 @@ class EthTradeForm with FormzMixin {
     tradeCurrency: tradeCurrency.toTradeCurrency()!,
     ethFromAddress: ethFromAddress.value,
     ethToAddress: ethToAddress.value,
-    totalWei: int.parse(ethTotalWei.value),
+    totalGwei: int.parse(ethTotalGwei.value),
     secretHash: secretHash.value,
     secret: secret.value.isEmpty ? null : secret.value,
     step: int.parse(step.value),
@@ -99,5 +99,5 @@ class EthTradeForm with FormzMixin {
   ) : null;
 
   @override
-  List<FormzInput> get inputs => [id, ...tradeCurrency.inputs, ethFromAddress, ethToAddress, ethTotalWei, secretHash, secret, step];
+  List<FormzInput> get inputs => [id, ...tradeCurrency.inputs, ethFromAddress, ethToAddress, ethTotalGwei, secretHash, secret, step];
 }

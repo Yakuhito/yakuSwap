@@ -8,6 +8,7 @@ import 'package:yakuswap/models/forms/trade_currency.dart';
 import 'package:yakuswap/models/inputs/address.dart';
 import 'package:yakuswap/models/inputs/address_prefix.dart';
 import 'package:yakuswap/models/inputs/fee.dart';
+import 'package:yakuswap/models/inputs/hash.dart';
 import 'package:yakuswap/models/inputs/max_block_height.dart';
 import 'package:yakuswap/models/inputs/min_confirmation_height.dart';
 import 'package:yakuswap/models/inputs/transaction_amount.dart';
@@ -117,6 +118,20 @@ class __BodyState extends State<_Body> {
                 isSender: isBuyer,
                 form: state.form.tradeCurrencyTwo,
                 onFormChanged: (newForm) => BlocProvider.of<TradeCubit>(context).changeTradeCurrencyTwo(newForm),
+              ),
+              isBuyer ? const SizedBox.shrink() :
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: TextFormField(
+                  key: Key("tradeSimple_${isBuyer}_${state.form.secretHash.value}"),
+                  initialValue: state.form.secretHash.value,
+                  decoration: InputDecoration(
+                    labelText: "Secret hash (from partner)",
+                    hintText: HashInput.hintText,
+                    errorText: state.form.secretHash.pure ? null : state.form.secretHash.error,
+                  ),
+                  onChanged: (newVal) => BlocProvider.of<TradeCubit>(context).changeSecretHash(newVal),
+                ),
               ),
               const SizedBox(height: 16.0),
               state.warning != null ? Padding(

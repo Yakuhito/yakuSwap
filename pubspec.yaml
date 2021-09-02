@@ -37,6 +37,7 @@ dependencies:
   crypto: ^3.0.1
   loading_indicator: ^3.0.1
   flutter_web3: ^2.0.4
+  convert: ^3.0.1
 
 dev_dependencies:
   flutter_lints: ^1.0.4

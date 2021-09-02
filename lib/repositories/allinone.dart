@@ -7,14 +7,12 @@ import 'package:yakuswap/models/eth_trade.dart';
 import 'package:yakuswap/models/full_node_connection.dart';
 import 'package:yakuswap/models/trade.dart';
 import 'package:yakuswap/models/trade_status.dart';
+import 'package:yakuswap/repositories/constants.dart';
 
 // todo: error handling
 // todo: api host offline
 
 class AllInOneRepository {
-  // ignore: constant_identifier_names
-  static const String API_HOST = "http://127.0.0.1:4143/api";
-
   Future<List<Currency>> getCurrencies() async {
     List<Currency> ret = [];
 
@@ -95,16 +93,6 @@ class AllInOneRepository {
 
   Future<void> deleteTrade({required String id}) async {
     await http.delete(Uri.parse("$API_HOST/trade/$id"));
-  }
-
-  Future<void> putAddress({required String address}) async {
-    await http.put(
-      Uri.parse("$API_HOST/eth/address"),
-      body: jsonEncode({"address": address}),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
   }
 
   Future<List<EthTrade>> getEthTrades() async {

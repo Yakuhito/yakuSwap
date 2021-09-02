@@ -45,6 +45,12 @@ class EthTrades extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 16.0),
+              Text(
+                "WARNING: Each party of an ETH swap will be required to make a transaction and pay the fee. Make sure you have enought ETH to make the transaction!",
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
               const Divider(height: 32.0),
               _EthTradesList(trades: state.trades),
             ],
@@ -130,7 +136,7 @@ class _TradeTile extends StatelessWidget {
             ),
           ],
         ),
-        title: Text("${trade.tradeCurrency.totalAmount / currency.unitsPerCoin} XCH for ${trade.totalWei / 1000000000000000000} ETH"),
+        title: Text("${trade.tradeCurrency.totalAmount / currency.unitsPerCoin} XCH for ${trade.totalGwei / 1000000000} ETH"),
         subtitle: Text("${trade.id}\n" + (trade.isBuyer ? "Initiated by you" : "Initiated by someone else")),
         isThreeLine: true,
         shape: RoundedRectangleBorder(
