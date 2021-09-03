@@ -198,14 +198,14 @@ class __BodyState extends State<_Body> {
                   DropdownMenuItem<bool>(
                     value: true,
                     child: Text(
-                      "I want to buy ETH with XCH",
+                      "I want to buy XCH with ETH",
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
                   DropdownMenuItem<bool>(
                     value: false,
                     child: Text(
-                      "I want to buy XCH with ETH",
+                      "I want to buy ETH with XCH",
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
