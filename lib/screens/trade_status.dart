@@ -128,14 +128,17 @@ class TradeStatusScreen extends StatelessWidget {
   Widget _getButtonForCommand(BuildContext context, String tradeId, Command? command) {
     if(command == null) return const SizedBox.shrink();
 
+    String message = command.type == CommandType.createSwap ? "Create swap" : (command.type == CommandType.completeSwap ? "Complete swap" : "Cancel swap");
     switch(command.type) {
       case CommandType.createSwap:
+      case CommandType.completeSwap:
+      case CommandType.cancelSwap:
         return Padding(
           padding: const EdgeInsets.only(top: 32.0),
           child: ElevatedButton(
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text("Create swap", style: TextStyle(color: Colors.white)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(message, style: const TextStyle(color: Colors.white)),
             ),
             onPressed: () => BlocProvider.of<EthCubit>(context).handleCommand(
               tradeId: tradeId,
