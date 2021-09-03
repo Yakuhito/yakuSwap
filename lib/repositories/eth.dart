@@ -40,18 +40,23 @@ class EthRepository {
   }
 
   Future<bool> createSwap(String tradeId, Map<String, dynamic> args, Function(String)? showMessage) async {
+    print("Start of createSwap");
     final String contractAddress = args["contract_address"]!;
     provider ??= Web3Provider(ethereum!);
 
+    print("Contract:");
     final Contract contract = Contract(
       contractAddress,
       Interface(ETH_CONTRACT_ABI),
       provider!.getSigner(),
     );
 
+    print("get swapId");
     final String swapId = await contract.call<String>('getSwapId', [hex.decode(args['secret_hash']), args['from_address']]);
+    print("get swap");
     final swap = await contract.call('swaps', [hex.decode(swapId.replaceFirst("0x", ""))]);
 
+    print("if");
     if(swap[0] != 0) {
       if(showMessage != null) showMessage("Previous swap found");
     } else {
@@ -62,6 +67,7 @@ class EthRepository {
           [hex.decode(args['secret_hash']), args['to_address'], args['max_block_height']],
           TransactionOverride(value: BigInt.from(args['amount'] * 1000000000)),
         );
+        print("tx accepted!");
       } catch(_) {
         if(showMessage != null) showMessage("Transaction rejected :(");
         return false;
@@ -71,6 +77,7 @@ class EthRepository {
       await tx.wait(1);
     }
 
+    print("update data!");
     await _updateData(tradeId, {"swap_created": true});
 
     return true;
