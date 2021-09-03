@@ -61,9 +61,25 @@ You can PM/DM me about it, but my response time tends to be very high. I strongl
 You don't have to - you can always modify the source of the exchange contract and remove the fee. However, the 0.7% fee motivates me to continue supporting this project (which was developed in my free time), so I'd really appreciate if you don't.
 
 ### License?
-MIT.
+Apache 2.0 (see end of README.md & LICENSE)
 
 ### I still have a few questions...
 No problem! Just join [the official Discord server](https://discord.gg/yNVNvQyYXn) and ask them :)
 
 Thank you to everyone using this software and special thank you to everyone paying the fee!
+
+License
+=======
+    Copyright 2021 Mihai Dancaescu
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
