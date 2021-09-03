@@ -90,7 +90,7 @@ class __BodyState extends State<_Body> {
     _xchTotalAmountController = TextEditingController(text: widget.form.tradeCurrency.totalAmount.value);
     _ethTotalAmountController = TextEditingController(text: widget.form.ethTotalGwei.value);
     _secretHashController = TextEditingController(text: widget.form.secretHash.value);
-    if(widget.form.isBuyer) {
+    if(!widget.form.isBuyer) {
       _ethYourAddressController = TextEditingController(text: widget.form.ethToAddress.value);
       _ethPartnerAddressController = TextEditingController(text: widget.form.ethFromAddress.value);
       _xchYourAddressController = TextEditingController(text: widget.form.tradeCurrency.fromAddress.value);
@@ -106,10 +106,10 @@ class __BodyState extends State<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    AddressInput xchAddress1 = widget.form.isBuyer ? widget.form.tradeCurrency.fromAddress : widget.form.tradeCurrency.toAddress;
-    AddressInput xchAddress2 = widget.form.isBuyer ? widget.form.tradeCurrency.toAddress : widget.form.tradeCurrency.fromAddress;
-    EthAddressInput ethAddress1 = widget.form.isBuyer ? widget.form.ethToAddress : widget.form.ethFromAddress;
-    EthAddressInput ethAddress2 = widget.form.isBuyer ? widget.form.ethFromAddress : widget.form.ethToAddress;
+    AddressInput xchAddress1 = widget.form.isBuyer ? widget.form.tradeCurrency.toAddress : widget.form.tradeCurrency.fromAddress;
+    AddressInput xchAddress2 = widget.form.isBuyer ? widget.form.tradeCurrency.fromAddress : widget.form.tradeCurrency.toAddress;
+    EthAddressInput ethAddress1 = widget.form.isBuyer ? widget.form.ethFromAddress : widget.form.ethToAddress;
+    EthAddressInput ethAddress2 = widget.form.isBuyer ? widget.form.ethToAddress : widget.form.ethFromAddress;
     
     return BlocListener<EthTradeCubit, EthTradeState>(
       listenWhen: (oldState, newState) => newState.forceReload == true,
@@ -117,7 +117,7 @@ class __BodyState extends State<_Body> {
         _xchTotalAmountController.text = state.form.tradeCurrency.totalAmount.value;
         _ethTotalAmountController.text = state.form.ethTotalGwei.value;
         _secretHashController.text = state.form.secretHash.value;
-        if(state.form.isBuyer) {
+        if(!state.form.isBuyer) {
           _ethYourAddressController.text = state.form.ethToAddress.value;
           _ethPartnerAddressController.text = state.form.ethFromAddress.value;
           _xchYourAddressController.text = state.form.tradeCurrency.fromAddress.value;
@@ -222,11 +222,11 @@ class __BodyState extends State<_Body> {
                 onChanged: (newVal) {
                   if(widget.form.isBuyer) {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
-                      fromAddress: AddressInput.dirty(value: newVal),
+                      toAddress: AddressInput.dirty(value: newVal),
                     ));
                   } else {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
-                      toAddress: AddressInput.dirty(value: newVal),
+                      fromAddress: AddressInput.dirty(value: newVal),
                     ));
                   }
                 },
@@ -242,11 +242,11 @@ class __BodyState extends State<_Body> {
                 onChanged: (newVal) {
                   if(widget.form.isBuyer) {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
-                      toAddress: AddressInput.dirty(value: newVal),
+                      fromAddress: AddressInput.dirty(value: newVal),
                     ));
                   } else {
                     BlocProvider.of<EthTradeCubit>(context).changeTradeCurrency(widget.form.tradeCurrency.copyWith(
-                      fromAddress: AddressInput.dirty(value: newVal),
+                      toAddress: AddressInput.dirty(value: newVal),
                     ));
                   }
                 },
@@ -276,9 +276,9 @@ class __BodyState extends State<_Body> {
                 ),
                 onChanged: (newVal) {
                   if(widget.form.isBuyer) {
-                    BlocProvider.of<EthTradeCubit>(context).changeEthToAddress(newVal);
-                  } else {
                     BlocProvider.of<EthTradeCubit>(context).changeEthFromAddress(newVal);
+                  } else {
+                    BlocProvider.of<EthTradeCubit>(context).changeEthToAddress(newVal);
                   }
                 },
               ),
@@ -292,9 +292,9 @@ class __BodyState extends State<_Body> {
                 ),
                 onChanged: (newVal) {
                   if(widget.form.isBuyer) {
-                    BlocProvider.of<EthTradeCubit>(context).changeEthFromAddress(newVal);
-                  } else {
                     BlocProvider.of<EthTradeCubit>(context).changeEthToAddress(newVal);
+                  } else {
+                    BlocProvider.of<EthTradeCubit>(context).changeEthFromAddress(newVal);
                   }
                 },
               ),
