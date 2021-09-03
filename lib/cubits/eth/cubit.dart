@@ -78,10 +78,6 @@ class EthCubit extends Cubit<EthState> {
           bool ok = await ethRepository.cancelSwap(tradeId, command.args, showMessage);
           if(ok) handlingCommands[tradeId] = command;
           break;
-        case CommandType.getSwapSecret:
-          bool ok = await ethRepository.getSwapSecret(tradeId, command.args, showMessage);
-          if(ok) handlingCommands[tradeId] = command;
-          break;
         default:
           handlingCommands[tradeId] = command;
       }

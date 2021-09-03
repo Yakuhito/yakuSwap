@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum CommandType {waitForSwap, createSwap, completeSwap, cancelSwap, getSwapSecret}
+enum CommandType {waitForSwap, createSwap, completeSwap, cancelSwap}
 
 class Command extends Equatable {
   final CommandType type;
@@ -19,8 +19,6 @@ class Command extends Equatable {
         return CommandType.createSwap;
       case "COMPLETE_SWAP":
         return CommandType.completeSwap;
-      case "GET_SWAP_SECRET":
-        return CommandType.getSwapSecret;
       case "CANCEL_SWAP":
       default:
         return CommandType.cancelSwap;

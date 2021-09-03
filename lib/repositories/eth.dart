@@ -184,35 +184,4 @@ class EthRepository {
 
     return true;
   }
-
-  Future<bool> getSwapSecret(String tradeId, Map<String, dynamic> args, Function(String)? showMessage) async {
-    final String contractAddress = args["contract_address"]!;
-    provider ??= Web3Provider(ethereum!);
-
-    final Contract contract = Contract(
-      contractAddress,
-      Interface(ETH_CONTRACT_ABI),
-      provider!.getSigner(),
-    );
-
-    final String swapId = args["swap_id"];
-    dynamic swap = await contract.call('swaps', [hex.decode(swapId)]);
-
-    while(swap == null || swap[0] == 0) {
-      swap = await contract.call('swaps', [hex.decode(swapId)]);
-      await Future.delayed(const Duration(seconds: 5));
-    }
-
-    final filter = contract.getFilter('SwapCompleted', [swapId]);
-    final events = await contract.queryFilter(filter, -256);
-    print(events);
-    print(events.length);
-    final secret = events.first.args[1];
-
-    print(secret);
-
-    await _updateData(tradeId, {"secret": secret});
-
-    return true;
-  }
 }
