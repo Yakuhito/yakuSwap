@@ -40,23 +40,18 @@ class EthRepository {
   }
 
   Future<bool> createSwap(String tradeId, Map<String, dynamic> args, Function(String)? showMessage) async {
-    print("Start of createSwap");
     final String contractAddress = args["contract_address"]!;
     provider ??= Web3Provider(ethereum!);
 
-    print("Contract:");
     final Contract contract = Contract(
       contractAddress,
       Interface(ETH_CONTRACT_ABI),
       provider!.getSigner(),
     );
 
-    print("get swapId");
     final String swapId = await contract.call<String>('getSwapId', [hex.decode(args['secret_hash']), args['from_address']]);
-    print("get swap");
     final swap = await contract.call('swaps', [hex.decode(swapId.replaceFirst("0x", ""))]);
 
-    print("if");
     if(swap[0] != 0) {
       if(showMessage != null) showMessage("Previous swap found");
     } else {
@@ -67,7 +62,6 @@ class EthRepository {
           [hex.decode(args['secret_hash']), args['to_address'], args['max_block_height']],
           TransactionOverride(value: BigInt.from(args['amount'] * 1000000000)),
         );
-        print("tx accepted!");
       } catch(_) {
         if(showMessage != null) showMessage("Transaction rejected :(");
         return false;
@@ -77,7 +71,6 @@ class EthRepository {
       await tx.wait(1);
     }
 
-    print("update data!");
     await _updateData(tradeId, {"swap_created": true});
 
     return true;
@@ -87,22 +80,18 @@ class EthRepository {
     final String contractAddress = args["contract_address"]!;
     provider ??= Web3Provider(ethereum!);
 
-    print("waitForSwap - contract");
     final Contract contract = Contract(
       contractAddress,
       Interface(ETH_CONTRACT_ABI),
       provider!.getSigner(),
     );
 
-    print("waitForSwap - swapId");
     final String swapId = (await contract.call<String>('getSwapId', [hex.decode(args['secret_hash']), args['from_address']])).replaceFirst("0x", "");
     dynamic swap = await contract.call('swaps', [hex.decode(swapId)]);
 
-    print("waitForSwap - while");
     while(swap == null || swap[0] == 0) {
       swap = await contract.call('swaps', [hex.decode(swapId)]);
       await Future.delayed(const Duration(seconds: 5));
-      print("waitForSwap - waitin'");
     }
 
     // 1000000000 * 993 / 1000 = 1000000 * 993 = 993000000 (amount after 0.7% fee)
@@ -115,13 +104,11 @@ class EthRepository {
       await _updateData(tradeId, {"swap_id": swapId, "confirmations": -1, "should_cancel": true});
       return;
     }
-    print("waitForSwap - request blocknumber and swap");
     BigInt blockNumber = await ethereum!.request<BigInt>('eth_blockNumber');
     swap = await contract.call('swaps', [hex.decode(swapId)]);
 
     while(true) {
       if(swap != null && swap[0] != 0) {
-        print("waitForSwap - update data");
         await _updateData(tradeId, {
           "swap_id": swapId,
           "confirmations": blockNumber.toInt() - int.parse(swap[1].toString()),

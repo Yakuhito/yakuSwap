@@ -112,6 +112,7 @@ class __BodyState extends State<_Body> {
                 form: state.form.tradeCurrencyOne,
                 onFormChanged: (newForm) => BlocProvider.of<TradeCubit>(context).changeTradeCurrencyOne(newForm),
                 locked: false,
+                currencyOne: true,
               ),
               const SizedBox(height: 32.0),
               _TradeCurrencyForm(
@@ -163,12 +164,14 @@ class _TradeCurrencyForm extends StatefulWidget {
   final TradeCurrencyForm form;
   final bool isSender;
   final bool locked;
+  final bool currencyOne;
 
   const _TradeCurrencyForm(
       {required this.onFormChanged,
       required this.form,
       required this.isSender,
       this.locked = true,
+      this.currencyOne = false,
       Key? key})
       : super(key: key);
 
@@ -205,101 +208,118 @@ class __TradeCurrencyFormState extends State<_TradeCurrencyForm> {
             .map((e) => e.addressPrefix)
             .toList();
     
-    final TextEditingController addrController1 = widget.isSender ? _fromAddressController : _toAddressController;
-    final TextEditingController addrController2 = widget.isSender ? _toAddressController : _fromAddressController;
-    final AddressInput addrInput1 = widget.isSender ? widget.form.fromAddress : widget.form.toAddress;
-    final AddressInput addrInput2 = widget.isSender ? widget.form.toAddress : widget.form.fromAddress;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        widget.locked ? Text(
-          widget.form.addressPrefix.value,
-          style: Theme.of(context).textTheme.headline5,
-        ) : DropdownButtonFormField<String>(
-                  key: Key("tradeCurrencyForm_adddressPrefix_${widget.form.addressPrefix.value}"),
-                  value: widget.form.addressPrefix.value,
-                  onChanged: (newVal) {
-                     widget.onFormChanged(widget.form.copyWith(
-                       addressPrefix: AddressPrefixInput.dirty(value: newVal!),
-                       toAddress: const AddressInput.pure(),
-                       fromAddress: const AddressInput.pure(),
-                       totalAmount: const TransactionAmountInput.pure(),
-                      ));
-                      _fromAddressController.clear();
-                      _toAddressController.clear();
-                      _totalAmountController.clear();
-                  },
-                  items: currencyPrefixes
-                      .map((prefix) => DropdownMenuItem<String>(
-                            value: prefix,
-                            child: Text(prefix, style: Theme.of(context).textTheme.headline5),
-                          ))
-                      .toList(),
-                ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          controller: addrController1,
-          decoration: InputDecoration(
-            labelText: "Your ${widget.form.addressPrefix.value.toUpperCase()} address",
-            hintText: AddressInput.hintText,
-            errorText: addrInput1.pure
-                ? null
-                : addrInput1.error,
-          ),
-          onChanged: (newVal) {
-            if(widget.isSender) {
-              widget.onFormChanged(widget.form.copyWith(fromAddress: AddressInput.dirty(value: newVal)));
-            } else {
-              widget.onFormChanged(widget.form.copyWith(toAddress: AddressInput.dirty(value: newVal)));
-            }
-          },
-        ),
-        TextFormField(
-          controller: addrController2,
-          decoration: InputDecoration(
-            labelText: "Your partner's ${widget.form.addressPrefix.value.toUpperCase()} address",
-            hintText: AddressInput.hintText,
-            errorText: addrInput2.pure
-                ? null
-                : addrInput2.error,
-          ),
-          onChanged: (newVal) {
-            if(widget.isSender) {
-              widget.onFormChanged(widget.form.copyWith(toAddress: AddressInput.dirty(value: newVal)));
-            } else {
-              widget.onFormChanged(widget.form.copyWith(fromAddress: AddressInput.dirty(value: newVal)));
-            }
-          },
-        ),
-        TextFormField(
-          controller: _totalAmountController,
-          decoration: InputDecoration(
-            labelText: TransactionAmountInput.labelText,
-            hintText: TransactionAmountInput.hintText,
-            errorText: widget.form.totalAmount.pure
-                ? null
-                : widget.form.totalAmount.error,
-            helperText: _getAmountHelper(
-              widget.form.totalAmount.value, widget.form.addressPrefix.value
+    return BlocConsumer<TradeCubit, TradeState>(
+      listenWhen: (oldState, newState) => newState.forceReload == true,
+      listener: (context, state) => setState(() {
+        if(widget.currencyOne) {
+          _fromAddressController.text = state.form.tradeCurrencyOne.fromAddress.value;
+          _toAddressController.text = state.form.tradeCurrencyOne.toAddress.value;
+          _totalAmountController.text = state.form.tradeCurrencyOne.totalAmount.value;
+        } else {
+          _fromAddressController.text = state.form.tradeCurrencyTwo.fromAddress.value;
+          _toAddressController.text = state.form.tradeCurrencyTwo.toAddress.value;
+          _totalAmountController.text = state.form.tradeCurrencyTwo.totalAmount.value;
+        }
+      }),
+      buildWhen: (oldState, newState) => newState.forceReload == true,
+      builder: (context, state) {
+        final TextEditingController addrController1 = widget.isSender ? _fromAddressController : _toAddressController;
+        final TextEditingController addrController2 = widget.isSender ? _toAddressController : _fromAddressController;
+        final AddressInput addrInput1 = widget.isSender ? widget.form.fromAddress : widget.form.toAddress;
+        final AddressInput addrInput2 = widget.isSender ? widget.form.toAddress : widget.form.fromAddress;
+        return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          widget.locked ? Text(
+            widget.form.addressPrefix.value,
+            style: Theme.of(context).textTheme.headline5,
+          ) : DropdownButtonFormField<String>(
+                    key: Key("tradeCurrencyForm_adddressPrefix_${widget.form.addressPrefix.value}"),
+                    value: widget.form.addressPrefix.value,
+                    onChanged: (newVal) {
+                       widget.onFormChanged(widget.form.copyWith(
+                         addressPrefix: AddressPrefixInput.dirty(value: newVal!),
+                         toAddress: const AddressInput.pure(),
+                         fromAddress: const AddressInput.pure(),
+                         totalAmount: const TransactionAmountInput.pure(),
+                        ));
+                        _fromAddressController.clear();
+                        _toAddressController.clear();
+                        _totalAmountController.clear();
+                    },
+                    items: currencyPrefixes
+                        .map((prefix) => DropdownMenuItem<String>(
+                              value: prefix,
+                              child: Text(prefix, style: Theme.of(context).textTheme.headline5),
+                            ))
+                        .toList(),
+                  ),
+          const SizedBox(height: 16.0),
+          TextFormField(
+            controller: addrController1,
+            decoration: InputDecoration(
+              labelText: "Your ${widget.form.addressPrefix.value.toUpperCase()} address",
+              hintText: AddressInput.hintText,
+              errorText: addrInput1.pure
+                  ? null
+                  : addrInput1.error,
             ),
-          ),
-          onChanged: (newVal) {
-            final TransactionAmountInput newInput = TransactionAmountInput.dirty(value: newVal);
-            
-            if(newInput.valid) {
-              final int fee = (int.parse(newVal) / 10000).ceil();
-              
-              widget.onFormChanged(widget.form.copyWith(
-                totalAmount: newInput,
-                fee: FeeInput.dirty(value: fee.toString()),
-              ));
-            } else {
-              widget.onFormChanged(widget.form.copyWith(totalAmount: newInput));
-            }
+            onChanged: (newVal) {
+              if(widget.isSender) {
+                widget.onFormChanged(widget.form.copyWith(fromAddress: AddressInput.dirty(value: newVal)));
+              } else {
+                widget.onFormChanged(widget.form.copyWith(toAddress: AddressInput.dirty(value: newVal)));
+              }
             },
-          keyboardType: TextInputType.number,
-        ),
-      ],
+          ),
+          TextFormField(
+            controller: addrController2,
+            decoration: InputDecoration(
+              labelText: "Your partner's ${widget.form.addressPrefix.value.toUpperCase()} address",
+              hintText: AddressInput.hintText,
+              errorText: addrInput2.pure
+                  ? null
+                  : addrInput2.error,
+            ),
+            onChanged: (newVal) {
+              if(widget.isSender) {
+                widget.onFormChanged(widget.form.copyWith(toAddress: AddressInput.dirty(value: newVal)));
+              } else {
+                widget.onFormChanged(widget.form.copyWith(fromAddress: AddressInput.dirty(value: newVal)));
+              }
+            },
+          ),
+          TextFormField(
+            controller: _totalAmountController,
+            decoration: InputDecoration(
+              labelText: TransactionAmountInput.labelText,
+              hintText: TransactionAmountInput.hintText,
+              errorText: widget.form.totalAmount.pure
+                  ? null
+                  : widget.form.totalAmount.error,
+              helperText: _getAmountHelper(
+                widget.form.totalAmount.value, widget.form.addressPrefix.value
+              ),
+            ),
+            onChanged: (newVal) {
+              final TransactionAmountInput newInput = TransactionAmountInput.dirty(value: newVal);
+              
+              if(newInput.valid) {
+                final int fee = (int.parse(newVal) / 10000).ceil();
+                
+                widget.onFormChanged(widget.form.copyWith(
+                  totalAmount: newInput,
+                  fee: FeeInput.dirty(value: fee.toString()),
+                ));
+              } else {
+                widget.onFormChanged(widget.form.copyWith(totalAmount: newInput));
+              }
+              },
+            keyboardType: TextInputType.number,
+          ),
+        ],
+      );
+      }
     );
   }
 

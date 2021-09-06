@@ -30,7 +30,6 @@ class TradeStatusScreen extends StatelessWidget {
           builder: (context) => BlocConsumer<TradeStatusCubit, TradeStatusState>(
             listenWhen: (oldState, newState) => newState.tradeStatus.command != oldState.tradeStatus.command && newState.tradeStatus.command?.type == CommandType.waitForSwap,
             listener: (context, state) {
-              print("wait for swap listener engaged");
               BlocProvider.of<EthCubit>(context).handleCommand(
                 tradeId: tradeId,
                 command: state.tradeStatus.command!,

@@ -55,7 +55,6 @@ class EthCubit extends Cubit<EthState> {
   }
 
   void handleCommand({required String tradeId, required Command command, Function(String)? showMessage}) async {
-    print("Command type: " + command.type.toString());
     if(!waitStreams.containsKey(tradeId)) {
       waitStreams[tradeId] = ethRepository.waitForSwap(tradeId, command.args, showMessage).listen((event) {});
     }
@@ -67,7 +66,6 @@ class EthCubit extends Cubit<EthState> {
           if(ok) handlingCommands[tradeId] = command;
           break;
         case CommandType.waitForSwap:
-          print("cancel waitForSwap");
           waitStreams[tradeId]?.cancel();
           waitStreams[tradeId] = ethRepository.waitForSwap(tradeId, command.args, showMessage).listen((event) {});
           handlingCommands[tradeId] = command;
