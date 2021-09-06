@@ -7,7 +7,7 @@ This repository only holds the source of the UI client. The server application c
 
 [Releases](https://github.com/Yakuhito/yakuSwap/releases)
 
-[YouTube Demo Trade](https://youtu.be/3iAqYNNq-h8)
+[YouTube Demo Trade](https://youtu.be/3iAqYNNq-h8) (older version)
 
 ## Why use yakuSwap?
 
@@ -18,11 +18,11 @@ This repository only holds the source of the UI client. The server application c
 **It's safer**: It's always safer to trust nobody rather than somebody. With yakuSwap, you don't need to trust anyone - escrows, intermediaries, exchanges or trade partners - since your money is handled by smart contracts.
 
 ## How to use
-You're going to need a fully synced node for each currency involved in a swap. Download the latest version of yakuSwap from the [releases page of this project](https://github.com/Yakuhito/yakuSwap/releases) on the same computer the nodes are running on and extract the zip file. It's recommended to start the server before starting the client.
+You're going to need a fully synced node for each currency involved in a swap. If you want to trade Ethereum, make sure you have enought ETH in your MetaMask wallet to pay for the transaction (100000 gas is enough). Download the latest version of yakuSwap from the [releases page of this project](https://github.com/Yakuhito/yakuSwap/releases) on the same computer the nodes are running on and extract the zip file. Start the application and then navigate to [http://localhost:4143](http://localhost:4143).
 
 After conecting with a trade partner via the Discord bot, copy the given string to your clipboard. Open yakuSwap, navigate to the 'Trades' tab, and click on the 'Add new trade' button. Click on 'Import' to load the trade from your clipboard. After clicking 'save', click on the trade to start it (the newest trade is usually at the bottom of the list).
 
-You can now follow the intructions on screen. You and your partner will make one transaction each. After seeing 'Done! Check your wallet :)' and  using the wallet to confirm that you have successfully received your coins (you might have to wait a minute for the transaction to be included in a block), you can safely delete the trade.
+You can now follow the intructions on screen. You and your partner will make one transaction each for fork trades. After seeing 'Done! Check your wallet :)' or 'Done' and  using the wallet to confirm that you have successfully received your coins (you might have to wait a minute for the transaction to be included in a block), you can safely delete the trade.
 
 Please note that the server creates a new log file for each trade. If anything unexpected happens with one of your trades, its log file will be useful in restoring your coins. However, the log also contains sensitive data, so please only share it with trusted people.
 
@@ -41,17 +41,17 @@ It's a way of exchanging two cryptocurrencies without a trusted third party.
 ### Who are you?
 I'm Mihai, but I usually go by the username `yakuhito`. Here's my [Twitter profile](https://twitter.com/yakuh1t0) and here's my [LinkedIn page](https://ro.linkedin.com/in/mihai-dancaescu-668a2a177).
 
+### Why are Ethereum trades in ALPHA?
+Solidity is trickier than it first seemed. The current contract needs to undergo further testing and modifications before it can be deployed on mainnet. Thank you for your patience!
+
 ### Why is the binary detected as a trojan/virus?
 I have a few theories, but I cannot give a definitive answer. All binaries were built using GitHub Actions from the public source code, which you can find in my repositories - if you don't want to trust me, just read the code and compile the binaries yourself.
 
-### How can I resize the client window?
-You can modify the client app's window size by editing `client/data/flutter_assets/screen_size.txt` and restarting the application.
-
-### My trade partner took a really long time (> 6h) to complete a step. Is there any danger?
-If the total time required to make a trade is higher than 16-18 hours, I highly recommend cancelling it by closing the client and the server, waiting another day and then opening the trade - that doesn't mean your partner had malicious intentions, though. Please keep in mind that your coins will get unlocked after a few days.
+### My trade partner took a really long time (> 30 min) to complete a step. Is there any danger?
+If the total time required to make a trade is higher than 30-40 minutes, I highly recommend cancelling it by closing the client and the server, waiting one hour and then opening the trade - that doesn't mean your partner had malicious intentions, though. Please keep in mind that your coins will get unlocked one hour after they were initially locked.
 
 ### I just cancelled my trade / My trade just got cancelled. How long do I have to wait before getting my coins back?
-If your trade gets cancelled for any reason, your coins will be locked for a certain period of time. For most currencies, that period is 16000 blocks from the moment the contract was issued (about 2-3 days). This long period was chosen in order to prevent a certain kind of attack against the swap.
+If your trade gets cancelled for any reason, your coins will be locked for a certain period of time. For most currencies, that period is 192 blocks from the moment the contract was issued (about 1 hour). This long period was chosen in order to prevent a certain kind of attack against the swap.
 
 ### Can my Chia fork be added?
 You can PM/DM me about it, but my response time tends to be very high. I strongly recommend using the app's Import/Export functionality to distribute your currency - that way, users can add your coin with a few clicks!
