@@ -33,10 +33,10 @@ Please note that the server creates a new log file for each trade. If anything u
 ![4.png](/screenshots/4.png?raw=true "")
 ![5.png](/screenshots/5.png?raw=true "")
 ![6.png](/screenshots/6.png?raw=true "")
-![7.png](/screenshots/6.png?raw=true "")
-![8.png](/screenshots/6.png?raw=true "")
-![9.png](/screenshots/6.png?raw=true "")
-![10.png](/screenshots/6.png?raw=true "")
+![7.png](/screenshots/7.png?raw=true "")
+![8.png](/screenshots/8.png?raw=true "")
+![9.png](/screenshots/9.png?raw=true "")
+![10.png](/screenshots/10.png?raw=true "")
 
 ## FAQ
 ### What is an atomic cross-chain swap?
