@@ -27,12 +27,16 @@ You can now follow the intructions on screen. You and your partner will make one
 Please note that the server creates a new log file for each trade. If anything unexpected happens with one of your trades, its log file will be useful in restoring your coins. However, the log also contains sensitive data, so please only share it with trusted people.
 
 ## Screenshots
-![1.png](/screenshots/1.png?raw=true "Currencies View")
-![2.png](/screenshots/2.png?raw=true "Trades View")
-![3.png](/screenshots/3.png?raw=true "Edit Currency")
-![4.png](/screenshots/4.png?raw=true "Edit Trade 1")
-![5.png](/screenshots/5.png?raw=true "Edit Trade 2")
-![6.png](/screenshots/6.png?raw=true "Trade View")
+![1.png](/screenshots/1.png?raw=true "")
+![2.png](/screenshots/2.png?raw=true "")
+![3.png](/screenshots/3.png?raw=true "")
+![4.png](/screenshots/4.png?raw=true "")
+![5.png](/screenshots/5.png?raw=true "")
+![6.png](/screenshots/6.png?raw=true "")
+![7.png](/screenshots/6.png?raw=true "")
+![8.png](/screenshots/6.png?raw=true "")
+![9.png](/screenshots/6.png?raw=true "")
+![10.png](/screenshots/6.png?raw=true "")
 
 ## FAQ
 ### What is an atomic cross-chain swap?
