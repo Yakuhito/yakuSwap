@@ -21,6 +21,8 @@ class EthTradeForm with FormzMixin {
   final SecretInput secret;
   final StepInput step;
   final bool isBuyer;
+  final String network;
+  final String token;
 
   const EthTradeForm({
     this.id = const IdInput.pure(),
@@ -32,6 +34,8 @@ class EthTradeForm with FormzMixin {
     this.secret = const SecretInput.pure(),
     this.step = const StepInput.pure(),
     this.isBuyer = true,
+    this.network = "Rinkeby Testnet",
+    this.token = "WETH",
   });
 
   EthTradeForm autoGenerateFields() {
@@ -62,7 +66,9 @@ class EthTradeForm with FormzMixin {
     secretHash = HashInput.dirty(value: trade.secretHash),
     secret = SecretInput.dirty(value: trade.secret ?? ""),
     step = StepInput.dirty(value: "${trade.step}"),
-    isBuyer = trade.isBuyer;
+    isBuyer = trade.isBuyer,
+    network = trade.network,
+    token = trade.token;
 
   EthTradeForm copyWith({
     IdInput? id,
@@ -74,6 +80,8 @@ class EthTradeForm with FormzMixin {
     SecretInput? secret,
     StepInput? step,
     bool? isBuyer,
+    String? network,
+    String? token,
   }) => EthTradeForm(
     id: id ?? this.id,
     tradeCurrency: tradeCurrency ?? this.tradeCurrency,
@@ -84,6 +92,8 @@ class EthTradeForm with FormzMixin {
     secret: secret ?? this.secret,
     step: step ?? this.step,
     isBuyer: isBuyer ?? this.isBuyer,
+    network: network ?? this.network,
+    token: token ?? this.token,
   );
 
   EthTrade? toTrade() => status == FormzStatus.valid ? EthTrade(
@@ -96,6 +106,8 @@ class EthTradeForm with FormzMixin {
     secret: secret.value.isEmpty ? null : secret.value,
     step: int.parse(step.value),
     isBuyer: isBuyer,
+    network: network,
+    token: token,
   ) : null;
 
   @override

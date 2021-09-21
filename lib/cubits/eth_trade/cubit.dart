@@ -113,4 +113,23 @@ class EthTradeCubit extends Cubit<EthTradeState> {
       forceReload: false,
     ));
   }
+
+  void changeNetwork(String newVal, String newToken) {
+    emit(state.copyWith(
+      form: state.form.copyWith(
+        network: newVal,
+        token: newToken
+      ),
+      forceReload: true,
+    ));
+  }
+
+  void changeToken(String newVal) {
+    emit(state.copyWith(
+      form: state.form.copyWith(
+        token: newVal,
+      ),
+      forceReload: false,
+    ));
+  }
 }

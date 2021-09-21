@@ -11,6 +11,8 @@ class EthTrade extends Equatable {
   final bool isBuyer;
   final String? secret;
   final int step;
+  final String network;
+  final String token;
 
   const EthTrade({
     required this.id,
@@ -21,7 +23,9 @@ class EthTrade extends Equatable {
     required this.secretHash,
     required this.isBuyer,
     required this.secret,
-    required this.step
+    required this.step,
+    required this.network,
+    required this.token,
   });
 
   EthTrade.fromJSON(Map<String, dynamic> data) :
@@ -33,7 +37,9 @@ class EthTrade extends Equatable {
     secretHash = data['secret_hash'],
     isBuyer = data['is_buyer'],
     secret = data['secret'],
-    step = data['step'];
+    step = data['step'],
+    network = data['network'],
+    token = data['token'];
 
   Map<String, dynamic> toJSON() => {
     'id': id,
@@ -45,6 +51,8 @@ class EthTrade extends Equatable {
     'is_buyer': isBuyer,
     'secret': secret,
     'step': step,
+    'network': network,
+    'token': token,
   };
 
   Map<String, dynamic> toSafeJSON() => {
@@ -57,8 +65,10 @@ class EthTrade extends Equatable {
     'is_buyer': !isBuyer,
     'secret': null,
     'step': 0,
+    'network': network,
+    'token': token,
   };
 
   @override
-  List<Object?> get props => [id, tradeCurrency, ethFromAddress, ethToAddress, totalGwei, secretHash, isBuyer, secret, step];
+  List<Object?> get props => [id, tradeCurrency, ethFromAddress, ethToAddress, totalGwei, secretHash, isBuyer, secret, step, network, token];
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yakuswap/cubits/eth/cubit.dart';
 import 'package:yakuswap/cubits/eth_trade/cubit.dart';
 import 'package:yakuswap/models/eth_trade.dart';
 import 'package:yakuswap/models/forms/eth_trade.dart';
@@ -324,6 +325,37 @@ class __BodyState extends State<_Body> {
                   onChanged: (newVal) => BlocProvider.of<EthTradeCubit>(context).changeSecretHash(newVal),
                 ),
               ), 
+              const SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                key: Key("ethTrade_network_${widget.form.network}"),
+                value: widget.form.network,
+                onChanged: (newVal) => BlocProvider.of<EthTradeCubit>(context).changeNetwork(
+                  newVal ?? "Rinkeby Testnet",
+                  newVal == null ? "WETH" : BlocProvider.of<EthCubit>(context).state.networks!.firstWhere((element) => element.name == newVal).tokenAddresses.keys.first,
+                ),
+                items: BlocProvider.of<EthCubit>(context).state.networks!.map(
+                  (network) => DropdownMenuItem<String>(
+                    value: network.name,
+                    child: Text(
+                      network.name,
+                    ),
+                  ),
+                ).toList(),
+              ),
+              const SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                key: Key("ethTrade_token_${widget.form.token}"),
+                value: widget.form.token,
+                onChanged: (newVal) => BlocProvider.of<EthTradeCubit>(context).changeToken(newVal ?? "WETH"),
+                items: BlocProvider.of<EthCubit>(context).state.networks!.firstWhere((e) => e.name == widget.form.network).tokenAddresses.keys.map(
+                  (token) => DropdownMenuItem<String>(
+                    value: token,
+                    child: Text(
+                      token,
+                    ),
+                  ),
+                ).toList(),
+              ),
               const SizedBox(height: 16.0),
               widget.warning != null ? Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
