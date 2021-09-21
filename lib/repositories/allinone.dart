@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:yakuswap/models/currency.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:yakuswap/models/eth_network.dart';
 import 'package:yakuswap/models/eth_trade.dart';
 import 'package:yakuswap/models/full_node_connection.dart';
 import 'package:yakuswap/models/trade.dart';
@@ -104,6 +105,20 @@ class AllInOneRepository {
 
     for(int i = 0; i < trades.length; ++i) {
       ret.add(EthTrade.fromJSON(trades[i]));
+    }
+
+    return ret;
+  }
+
+  Future<List<EthNetwork>> getEthNetworks() async {
+    List<EthNetwork> ret = [];
+
+    final http.Response res = await http.get(Uri.parse("$API_HOST/eth/networks"));
+    final Map<String, dynamic> parsed = jsonDecode(res.body);
+    final List<Map<String, dynamic>> networks = List<Map<String, dynamic>>.from(parsed['networks']);
+
+    for(int i = 0; i < networks.length; ++i) {
+      ret.add(EthNetwork.fromJSON(networks[i]));
     }
 
     return ret;

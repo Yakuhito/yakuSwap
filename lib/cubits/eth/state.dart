@@ -7,22 +7,25 @@ class EthState extends Equatable {
   final bool walletConnected;
   final String? address;
   final List<EthTrade>? trades;
+  final List<EthNetwork>? networks;
 
   const EthState._({
     this.status = EthStatus.loading,
     this.walletConnected = false,
     this.address,
-    this.trades
+    this.trades,
+    this.networks,
   });
 
   const EthState.initial() : this._();
   const EthState.loading() : this._();
   const EthState.error() : this._(status:EthStatus.loadError);
-  const EthState.loaded(bool walletConnected, {String? address, List<EthTrade>? trades}) : this._(
+  const EthState.loaded(bool walletConnected, {String? address, List<EthTrade>? trades, List<EthNetwork>? networks}) : this._(
     status: EthStatus.loaded,
     walletConnected: walletConnected,
     address: address,
-    trades: trades
+    trades: trades,
+    networks: networks,
   );
 
   @override

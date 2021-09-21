@@ -26,27 +26,90 @@ const String ETH_CONTRACT_ABI = '''[
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
+				"indexed": false,
 				"internalType": "bytes32",
-				"name": "_swapId",
+				"name": "swapHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "fromAddress",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "toAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "secretHash",
 				"type": "bytes32"
 			},
 			{
 				"indexed": false,
-				"internalType": "string",
-				"name": "_secret",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "blockNumber",
+				"type": "uint256"
 			}
 		],
-		"name": "SwapCompleted",
+		"name": "SwapCreated",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "MAX_BLOCK_HEIGHT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "toAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
 				"internalType": "bytes32",
-				"name": "_swapId",
+				"name": "secretHash",
 				"type": "bytes32"
+			},
+			{
+				"internalType": "uint256",
+				"name": "blockNumber",
+				"type": "uint256"
 			}
 		],
 		"name": "cancelSwap",
@@ -57,13 +120,33 @@ const String ETH_CONTRACT_ABI = '''[
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "_swapId",
-				"type": "bytes32"
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "fromAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "toAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "blockNumber",
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
-				"name": "_secret",
+				"name": "secret",
 				"type": "string"
 			}
 		],
@@ -75,29 +158,27 @@ const String ETH_CONTRACT_ABI = '''[
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "_secretHash",
-				"type": "bytes32"
-			},
-			{
 				"internalType": "address",
-				"name": "_toAddress",
+				"name": "tokenAddress",
 				"type": "address"
 			},
 			{
-				"internalType": "uint16",
-				"name": "_maxBlockHeight",
-				"type": "uint16"
+				"internalType": "address",
+				"name": "toAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "secretHash",
+				"type": "bytes32"
 			}
 		],
 		"name": "createSwap",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getFees",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -105,17 +186,37 @@ const String ETH_CONTRACT_ABI = '''[
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "secretHash",
-				"type": "bytes32"
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
 			},
 			{
 				"internalType": "address",
 				"name": "fromAddress",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "toAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "secretHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "uint256",
+				"name": "blockNumber",
+				"type": "uint256"
 			}
 		],
-		"name": "getSwapId",
+		"name": "getSwapHash",
 		"outputs": [
 			{
 				"internalType": "bytes32",
@@ -123,7 +224,7 @@ const String ETH_CONTRACT_ABI = '''[
 				"type": "bytes32"
 			}
 		],
-		"stateMutability": "pure",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -157,46 +258,22 @@ const String ETH_CONTRACT_ABI = '''[
 		"name": "swaps",
 		"outputs": [
 			{
-				"internalType": "enum yakuSwap.SwapStatus",
-				"name": "status",
+				"internalType": "enum YakuSwap.SwapStatus",
+				"name": "",
 				"type": "uint8"
-			},
-			{
-				"internalType": "uint256",
-				"name": "startBlock",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "secretHash",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "fromAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "toAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint16",
-				"name": "maxBlockHeight",
-				"type": "uint16"
 			}
 		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
 		"name": "totalFees",
 		"outputs": [
 			{
@@ -217,6 +294,19 @@ const String ETH_CONTRACT_ABI = '''[
 			}
 		],
 		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			}
+		],
+		"name": "withdrawFees",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yakuswap/models/command.dart';
+import 'package:yakuswap/models/eth_network.dart';
 import 'package:yakuswap/models/eth_trade.dart';
 import 'package:yakuswap/repositories/allinone.dart';
 import 'package:yakuswap/repositories/eth.dart';
@@ -35,7 +36,8 @@ class EthCubit extends Cubit<EthState> {
         ethRepository.registerListener();
 
         final List<EthTrade> trades = await allInOneRepository.getEthTrades();
-        emit(EthState.loaded(true, address: address, trades: trades));
+        final List<EthNetwork> networks = await allInOneRepository.getEthNetworks();
+        emit(EthState.loaded(true, address: address, trades: trades, networks: networks));
       }
     } catch(_) {
       emit(const EthState.error());
