@@ -47,12 +47,6 @@ class EthTrades extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               Text(
-                "TESTNET ONLY: Ethereum swaps are currently in ALPHA. Please only make transactions on the Rinkeby Ethereum Testnet.",
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.purple),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16.0),
-              Text(
                 "WARNING: Each party of an ETH swap will be required to make a transaction and pay the fee. Make sure you have enought ETH to make the transaction!",
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.red),
                 textAlign: TextAlign.center,
