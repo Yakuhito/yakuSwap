@@ -3,7 +3,7 @@ Atomic cross-chain swaps for Chia and its forks.
 
 #### [Official Discord Server](https://discord.gg/yNVNvQyYXn)
 
-This repository only holds the source of the UI client. The server application can be found in [the yakuSwap-server repository](https://github.com/Yakuhito/yakuSwap-server).
+This repository only holds the source of the UI client. The server application can be found in [the yakuSwap-server repository](https://github.com/Yakuhito/yakuSwap-server) and the Ethereum contract can be found in [the yakuSwap-eth repository](https://github.com/Yakuhito/yakuSwap-eth).
 
 [Releases](https://github.com/Yakuhito/yakuSwap/releases)
 
