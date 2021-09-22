@@ -58,7 +58,7 @@ class EthRepository {
     final int blockNumber = int.parse(event.args[6].toString());
 
     final String swapHash2 = await contract.call('getSwapHash', 
-      [args['token_address'], args['from_address'], args['to_address'], args['amount'] * 1000000000, hex.decode(args['secret_hash']), blockNumber]
+      [args['token_address'], args['from_address'], args['to_address'], BigInt.from(args['amount'] * 1000000000).toBigNumber, hex.decode(args['secret_hash']), blockNumber]
     );
 
     if(swapHash1 != swapHash2.replaceFirst("0x", "")) return null;
@@ -100,36 +100,43 @@ class EthRepository {
       provider!.getSigner(),
     );
 
-    final BigInt approvedAmount = await tokenContract.allowance(fromAddress, contractAddress);
-    if(approvedAmount < amount) {
+    final String? swapHash = await _getSwapHash(contract, args);
+
+    if(swapHash == null) {
+      final BigInt approvedAmount = await tokenContract.allowance(fromAddress, contractAddress);
+      if(approvedAmount < amount) {
+        try {
+          final TransactionResponse tx1 = await tokenContract.approve(contractAddress, amount);
+          await _updateData(tradeId, {"token_approval_tx_sent": true});
+          await tx1.wait(1);
+          await _updateData(tradeId, {"token_approval_tx_confirmed": true});
+        } catch(_) {
+          if(showMessage != null) showMessage("Transaction rejected :(");
+          return false;
+        }
+      } else {
+        await _updateData(tradeId, {"token_approval_tx_sent": true, "token_approval_tx_confirmed": true});
+      }
+    
+      TransactionResponse tx2;
       try {
-        final TransactionResponse tx1 = await tokenContract.approve(contractAddress, amount);
-        await _updateData(tradeId, {"token_approval_tx_sent": true});
-        await tx1.wait(1);
-        await _updateData(tradeId, {"token_approval_tx_confirmed": true});
+        tx2 = await contract.send(
+          'createSwap',
+          [tokenAddress, args['to_address'], amount.toBigNumber, hex.decode(args['secret_hash'])],
+        );
       } catch(_) {
         if(showMessage != null) showMessage("Transaction rejected :(");
         return false;
       }
+
+      if(showMessage != null) showMessage("Transaction sent; waiting for confirmation...");
+      await _updateData(tradeId, {"createSwap_tx_sent": true});
+    
+      await tx2.wait(1);
     } else {
       await _updateData(tradeId, {"token_approval_tx_sent": true, "token_approval_tx_confirmed": true});
+      await _updateData(tradeId, {"createSwap_tx_sent": true});
     }
-    
-    TransactionResponse tx2;
-    try {
-      tx2 = await contract.send(
-        'createSwap',
-        [tokenAddress, args['to_address'], amount.toBigNumber, hex.decode(args['secret_hash'])],
-      );
-    } catch(_) {
-      if(showMessage != null) showMessage("Transaction rejected :(");
-      return false;
-    }
-
-    if(showMessage != null) showMessage("Transaction sent; waiting for confirmation...");
-    await _updateData(tradeId, {"createSwap_tx_sent": true});
-    
-    await tx2.wait(1);
 
     await _updateData(tradeId, {"swap_created": true});
 
@@ -191,7 +198,7 @@ class EthRepository {
     try {
       tx = await contract.send(
         'completeSwap',
-        [args['token_address'], args['from_address'], args['to_address'], amount, blockNumber, args['secret']],
+        [args['token_address'], args['from_address'], args['to_address'], amount.toBigNumber, blockNumber, args['secret']],
       );
     } catch(_) {
       if(showMessage != null) showMessage("Transaction rejected :(");
@@ -223,7 +230,7 @@ class EthRepository {
     try {
       tx = await contract.send(
         'cancelSwap',
-        [args['token_address'], args['to_address'], amount, hex.decode(args['secret_hash']), blockNumber]
+        [args['token_address'], args['to_address'], amount.toBigNumber, hex.decode(args['secret_hash']), blockNumber]
       );
     } catch(_) {
       if(showMessage != null) showMessage("Transaction rejected :(");
