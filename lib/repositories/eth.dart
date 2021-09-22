@@ -66,29 +66,20 @@ class EthRepository {
   }
 
   Future<int> _getSwapBlockNumber(Contract contract, Map<String, dynamic> args) async {
-    print("a");
     final filter = contract.getFilter('SwapCreated', [null, args['token_address'], args['from_address'], args['to_address']]);
-    print("b");
     final events = await contract.queryFilter(filter, -257);
 
-    print("c");
     Event? event;
-    print("d");
     for(int i = 0; i < events.length; ++i) {
       String sHash = events[i].args[5];
-      print(sHash);
       if(sHash.replaceFirst("0x", "") == args['secret_hash']) {
-        print("e");
         event = events[i];
         break;
       }
     }
 
-    print("f");
-    print(event!.args);
     final int blockNumber = int.parse(event!.args[6].toString());
 
-    print("g");
     return blockNumber;
   }
 
@@ -192,14 +183,9 @@ class EthRepository {
 
   Future<bool> completeSwap(String tradeId, Map<String, dynamic> args, Function(String)? showMessage) async {
     final String contractAddress = args["contract_address"]!;
-    print("1");
     final BigInt amount = BigInt.from(args['amount'] * 1000000000);
 
-    print("2");
-
     provider ??= Web3Provider(ethereum!);
-
-    print("3");
 
     final Contract contract = Contract(
       contractAddress,
@@ -207,36 +193,23 @@ class EthRepository {
       provider!.getSigner(),
     );
 
-    print("4");
-
     final int blockNumber = await _getSwapBlockNumber(contract, args);
-
-    print("5");
 
     TransactionResponse tx;
     try {
-      print("6");
       tx = await contract.send(
         'completeSwap',
         [args['token_address'], args['from_address'], args['to_address'], amount.toBigNumber, blockNumber, args['secret']],
       );
-      print("7");
     } catch(_) {
-      print("666");
       if(showMessage != null) showMessage("Transaction rejected :(");
       return false;
     }
 
-    print("8");
-
     if(showMessage != null) showMessage("Transaction sent; waiting for confirmation...");
     await tx.wait(1);
 
-    print("9");
-
     await _updateData(tradeId, {"swap_completed": true});
-
-    print("10");
 
     return true;
   }
