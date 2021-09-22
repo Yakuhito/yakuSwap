@@ -39,8 +39,55 @@ class EthRepository {
     );
   }
 
+  Future<String?> _getSwapHash(Contract contract, Map<String, dynamic> args) async {
+    final filter = contract.getFilter('SwapCreated', [null, args['token_address'], args['from_address'], args['to_address']]);
+    final events = await contract.queryFilter(filter, -257);
+
+    Event? event;
+    for(int i = 0; i < events.length; ++i) {
+      String sHash = events[i].args[5];
+      if(sHash.replaceFirst("0x", "") == args['secret_hash']) {
+        event = events[i];
+        break;
+      }
+    }
+
+    if(event == null) return null;
+
+    final String swapHash1 = event.args[0].replaceFirst("0x", "");
+    final int blockNumber = int.parse(event.args[6].toString());
+
+    final String swapHash2 = await contract.call('getSwapHash', 
+      [args['token_address'], args['from_address'], args['to_address'], args['amount'] * 1000000000, hex.decode(args['secret_hash']), blockNumber]
+    );
+
+    if(swapHash1 != swapHash2.replaceFirst("0x", "")) return null;
+    return swapHash1;
+  }
+
+  Future<int> _getSwapBlockNumber(Contract contract, Map<String, dynamic> args) async {
+    final filter = contract.getFilter('SwapCreated', [null, args['token_address'], args['from_address'], args['to_address']]);
+    final events = await contract.queryFilter(filter, -257);
+
+    Event? event;
+    for(int i = 0; i < events.length; ++i) {
+      String sHash = events[i].args[5];
+      if(sHash.replaceFirst("0x", "") == args['secret_hash']) {
+        event = events[i];
+        break;
+      }
+    }
+
+    final int blockNumber = int.parse(event!.args[6].toString());
+
+    return blockNumber;
+  }
+
   Future<bool> createSwap(String tradeId, Map<String, dynamic> args, Function(String)? showMessage) async {
     final String contractAddress = args["contract_address"]!;
+    final String tokenAddress = args["token_address"]!;
+    final String fromAddress = args["from_address"]!;
+    final BigInt amount = BigInt.from(args['amount'] * 1000000000);
     provider ??= Web3Provider(ethereum!);
 
     final Contract contract = Contract(
@@ -48,28 +95,41 @@ class EthRepository {
       Interface(ETH_CONTRACT_ABI),
       provider!.getSigner(),
     );
+    final ContractERC20 tokenContract = ContractERC20(
+      tokenAddress,
+      provider!.getSigner(),
+    );
 
-    final String swapId = await contract.call<String>('getSwapId', [hex.decode(args['secret_hash']), args['from_address']]);
-    final swap = await contract.call('swaps', [hex.decode(swapId.replaceFirst("0x", ""))]);
-
-    if(swap[0] != 0) {
-      if(showMessage != null) showMessage("Previous swap found");
-    } else {
-      TransactionResponse tx;
+    final BigInt approvedAmount = await tokenContract.allowance(fromAddress, contractAddress);
+    if(approvedAmount < amount) {
       try {
-        tx = await contract.send(
-          'createSwap',
-          [hex.decode(args['secret_hash']), args['to_address'], args['max_block_height']],
-          TransactionOverride(value: BigInt.from(args['amount'] * 1000000000)),
-        );
+        final TransactionResponse tx1 = await tokenContract.approve(contractAddress, amount);
+        await _updateData(tradeId, {"token_approval_tx_sent": true});
+        await tx1.wait(1);
+        await _updateData(tradeId, {"token_approval_tx_confirmed": true});
       } catch(_) {
         if(showMessage != null) showMessage("Transaction rejected :(");
         return false;
       }
-
-      if(showMessage != null) showMessage("Transaction sent; waiting for confirmation...");
-      await tx.wait(1);
+    } else {
+      await _updateData(tradeId, {"token_approval_tx_sent": true, "token_approval_tx_confirmed": true});
     }
+    
+    TransactionResponse tx2;
+    try {
+      tx2 = await contract.send(
+        'createSwap',
+        [tokenAddress, args['to_address'], amount.toBigNumber, hex.decode(args['secret_hash'])],
+      );
+    } catch(_) {
+      if(showMessage != null) showMessage("Transaction rejected :(");
+      return false;
+    }
+
+    if(showMessage != null) showMessage("Transaction sent; waiting for confirmation...");
+    await _updateData(tradeId, {"createSwap_tx_sent": true});
+    
+    await tx2.wait(1);
 
     await _updateData(tradeId, {"swap_created": true});
 
@@ -86,42 +146,37 @@ class EthRepository {
       provider!.getSigner(),
     );
 
-    final String swapId = (await contract.call<String>('getSwapId', [hex.decode(args['secret_hash']), args['from_address']])).replaceFirst("0x", "");
-    dynamic swap = await contract.call('swaps', [hex.decode(swapId)]);
+    String? swapHash = await _getSwapHash(contract, args);
 
-    while(swap == null || swap[0] == 0) {
-      swap = await contract.call('swaps', [hex.decode(swapId)]);
+    while(swapHash == null) {
+      swapHash = await _getSwapHash(contract, args);
       await Future.delayed(const Duration(seconds: 5));
     }
 
-    // 1000000000 * 993 / 1000 = 1000000 * 993 = 993000000 (amount after 0.7% fee)
-    if(swap[0] != 1 ||
-        int.parse(swap[2].toString()) < args['amount'] * 993000000 ||
-        swap[3] != "0x" + args['secret_hash'] ||
-        swap[5].toLowerCase() != args['to_address'].toLowerCase() ||
-        swap[6] != 256) {
-      if(showMessage != null) showMessage("Swap parameters are wrong - cancelling trade");
-      await _updateData(tradeId, {"swap_id": swapId, "confirmations": -1, "should_cancel": true});
+    final int swap = await contract.call('swaps', [hex.decode(swapHash)]);
+    if(swap != 1) {
+      if(showMessage != null) showMessage("Swap status is wrong - cancelling trade");
+      await _updateData(tradeId, {"swap_id": swapHash, "confirmations": -1, "should_cancel": true});
       return;
     }
-    BigInt blockNumber = await ethereum!.request<BigInt>('eth_blockNumber');
-    swap = await contract.call('swaps', [hex.decode(swapId)]);
+    
+    final int swapBlockNumber = await _getSwapBlockNumber(contract, args);
+    BigInt blockNumber;
 
     while(true) {
-      if(swap != null && swap[0] != 0) {
-        await _updateData(tradeId, {
-          "swap_id": swapId,
-          "confirmations": blockNumber.toInt() - int.parse(swap[1].toString()),
-          "should_cancel": false});
-      }
-      await Future.delayed(const Duration(seconds: 5));
       blockNumber = await ethereum!.request<BigInt>('eth_blockNumber');
-      swap = await contract.call('swaps', [hex.decode(swapId)]);
+      await _updateData(tradeId, {
+        "swap_id": swapHash,
+        "confirmations": blockNumber.toInt() - swapBlockNumber,
+          "should_cancel": false
+      });
+      await Future.delayed(const Duration(seconds: 5));
     }
   }
 
   Future<bool> completeSwap(String tradeId, Map<String, dynamic> args, Function(String)? showMessage) async {
     final String contractAddress = args["contract_address"]!;
+    final BigInt amount = BigInt.from(args['amount'] * 1000000000);
     provider ??= Web3Provider(ethereum!);
 
     final Contract contract = Contract(
@@ -130,11 +185,13 @@ class EthRepository {
       provider!.getSigner(),
     );
 
+    final int blockNumber = await _getSwapBlockNumber(contract, args);
+
     TransactionResponse tx;
     try {
       tx = await contract.send(
         'completeSwap',
-        [hex.decode(args['swap_id']), args['secret']],
+        [args['token_address'], args['from_address'], args['to_address'], amount, blockNumber, args['secret']],
       );
     } catch(_) {
       if(showMessage != null) showMessage("Transaction rejected :(");
@@ -151,6 +208,7 @@ class EthRepository {
 
   Future<bool> cancelSwap(String tradeId, Map<String, dynamic> args, Function(String)? showMessage) async {
     final String contractAddress = args["contract_address"]!;
+    final BigInt amount = BigInt.from(args['amount'] * 1000000000);
     provider ??= Web3Provider(ethereum!);
 
     final Contract contract = Contract(
@@ -159,11 +217,13 @@ class EthRepository {
       provider!.getSigner(),
     );
 
+    final int blockNumber = await _getSwapBlockNumber(contract, args);
+
     TransactionResponse tx;
     try {
       tx = await contract.send(
         'cancelSwap',
-        [hex.decode(args['swap_id'])],
+        [args['token_address'], args['to_address'], amount, hex.decode(args['secret_hash']), blockNumber]
       );
     } catch(_) {
       if(showMessage != null) showMessage("Transaction rejected :(");
