@@ -1,4 +1,18 @@
+## Discord Announcement
+```
+Hi @everyone - thanks for sticking around!
+
+I know it's been a while since the last project update (sorry!). Unfortunately, I've come to realize that the ecosystem is a little bit too young for most projects, including yakuSwap. That being said, Chia's potential is huge and the community is awesome. I'm working on a new, probably more useful project: [GreenWeb.js](https://github.com/Yakuhito/GreenWeb.js).
+
+The goal of GreenWeb.js is to be Chia's equivalent of web3.js - developers will be able to include a javascript file on their site and then get data from the Chia blockchain. The project is still young and, at the time of writing this message, still has an SSL-related issue that prevents it from working. However, I'm confident that I'll find a way around it (probably with the help of someone else) and that we'll see web apps using GreenWeb.js in the future.
+
+In other news, the #gm channel is now open. Please only use it to say 'gm' - any other thing will get you kicked!
+
+If you have any questions, don't hesitate to use #general.
+```
+
 # yakuSwap
+
 Atomic cross-chain swaps for Chia and its forks.
 
 #### [Official Discord Server](https://discord.gg/yNVNvQyYXn)
